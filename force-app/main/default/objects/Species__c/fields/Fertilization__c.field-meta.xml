@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Fertilization__c</fullName>
+    <label>Fertilization</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Low (cada mes)</fullName>
+                <default>false</default>
+                <label>Low (cada mes)</label>
+            </value>
+            <value>
+                <fullName>Medium (cada 2 semanas)</fullName>
+                <default>false</default>
+                <label>Medium (cada 2 semanas)</label>
+            </value>
+            <value>
+                <fullName>High (semanal)</fullName>
+                <default>false</default>
+                <label>High (semanal)</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

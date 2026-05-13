@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Type__c</fullName>
-    <label>Type</label>
-    <required>true</required>
+    <fullName>Light__c</fullName>
+    <label>Light</label>
+    <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>
-        <restricted>true</restricted>
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Edible</fullName>
-                <default>true</default>
-                <label>Edible</label>
+                <fullName>Full Sun</fullName>
+                <default>false</default>
+                <label>Full Sun</label>
             </value>
             <value>
-                <fullName>Ornamental</fullName>
+                <fullName>Partial Shade</fullName>
                 <default>false</default>
-                <label>Ornamental</label>
+                <label>Partial Shade</label>
             </value>
         </valueSetDefinition>
     </valueSet>

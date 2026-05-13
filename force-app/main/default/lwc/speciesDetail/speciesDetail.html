@@ -1,0 +1,134 @@
+<template>
+
+    <!-- BOTÓN EDITAR -->
+    <div class="slds-align_absolute-right slds-m-bottom_small">
+        <lightning-button-icon
+            icon-name="utility:edit"
+            alternative-text="Edit"
+            onclick={handleEdit}>
+        </lightning-button-icon>
+    </div>
+
+    <!-- MODO VIEW -->
+    <template if:false={isEdit}>
+
+        <lightning-tabset>
+
+            <!-- DETAILS -->
+            <lightning-tab label="Details">
+                <div class="container">
+
+                    <div class="left">
+                        <template if:true={imageUrl}>
+                            <img src={imageUrl} class="image-large"/>
+                        </template>
+                    </div>
+
+                    <div class="right">
+                        <lightning-record-view-form
+                            record-id={recordId}
+                            object-api-name="Species__c">
+
+                            <lightning-output-field field-name="Name"></lightning-output-field>
+                            <lightning-output-field field-name="Description__c"></lightning-output-field>
+                            <lightning-output-field field-name="Location__c"></lightning-output-field>
+
+                        </lightning-record-view-form>
+                    </div>
+
+                </div>
+            </lightning-tab>
+
+            <!-- ENVIRONMENT -->
+            <lightning-tab label="Environment">
+                <div class="container">
+
+                    <div class="left">
+                        <template if:true={imageUrl}>
+                            <img src={imageUrl} class="image-large"/>
+                        </template>
+                    </div>
+
+                    <div class="right">
+                        <lightning-record-view-form
+                            record-id={recordId}
+                            object-api-name="Species__c">
+
+                            <lightning-output-field field-name="Ideal_Max_Temperature__c"></lightning-output-field>
+                            <lightning-output-field field-name="Light__c"></lightning-output-field>
+                            <lightning-output-field field-name="Whatering__c"></lightning-output-field>
+
+                        </lightning-record-view-form>
+                    </div>
+
+                </div>
+            </lightning-tab>
+
+            <!-- CARING -->
+            <lightning-tab label="Caring">
+                <div class="container">
+
+                    <div class="left">
+                        <template if:true={imageUrl}>
+                            <img src={imageUrl} class="image-large"/>
+                        </template>
+                    </div>
+
+                    <div class="right">
+                        <lightning-record-view-form
+                            record-id={recordId}
+                            object-api-name="Species__c">
+
+                            <lightning-output-field field-name="Care_Notes__c"></lightning-output-field>
+                            <lightning-output-field field-name="Fertilization__c"></lightning-output-field>
+
+                        </lightning-record-view-form>
+                    </div>
+
+                </div>
+            </lightning-tab>
+
+        </lightning-tabset>
+
+    </template>
+
+    <!-- MODO EDIT -->
+    <template if:true={isEdit}>
+
+        <lightning-record-edit-form
+            record-id={recordId}
+            object-api-name="Species__c"
+            onsuccess={handleSuccess}>
+
+            <lightning-tabset>
+
+                <lightning-tab label="Details">
+                    <lightning-input-field field-name="Name"></lightning-input-field>
+                    <lightning-input-field field-name="Description__c"></lightning-input-field>
+                    <lightning-input-field field-name="Location__c"></lightning-input-field>
+                    <lightning-input-field field-name="Image_URL__c"></lightning-input-field>
+                </lightning-tab>
+
+                <lightning-tab label="Environment">
+                    <lightning-input-field field-name="Ideal_Max_Temperature__c"></lightning-input-field>
+                    <lightning-input-field field-name="Light__c"></lightning-input-field>
+                    <lightning-input-field field-name="Whatering__c"></lightning-input-field>
+                </lightning-tab>
+
+                <lightning-tab label="Caring">
+                    <lightning-input-field field-name="Care_Notes__c"></lightning-input-field>
+                    <lightning-input-field field-name="Fertilization__c"></lightning-input-field>
+                </lightning-tab>
+
+            </lightning-tabset>
+
+            <div class="slds-m-top_medium">
+                <lightning-button type="submit" label="Save" variant="brand"></lightning-button>
+                <lightning-button label="Cancel" onclick={handleCancel}></lightning-button>
+            </div>
+
+        </lightning-record-edit-form>
+
+    </template>
+
+</template>

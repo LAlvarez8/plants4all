@@ -1,0 +1,1252 @@
+WEBVTT
+Kind: captions
+Language: es
+
+00:00:54.250 --> 00:01:36.890
+[Música]
+
+00:01:36.890 --> 00:02:19.540
+[Música]
+
+00:02:19.540 --> 00:03:02.190
+[Música]
+
+00:03:02.190 --> 00:03:09.290
+buenas que tal bienvenidos todos quiero saludar
+a juan que me ha puesto en el que buenos días
+
+00:03:09.290 --> 00:03:15.830
+pero para mí son buenas tardes pero buenos
+días para ti y para que haya conectado voy
+
+00:03:15.830 --> 00:03:22.410
+a seguir con la serie de webinars que estaba
+haciendo para aprender a desarrollar en salesforce
+
+00:03:22.410 --> 00:03:28.580
+voy a seguir construyendo la aplicación que
+estábamos creando de bueno para gestionar
+
+00:03:28.580 --> 00:03:34.970
+las plantas no las plantaciones con mi casa
+y nada bueno primero pediros disculpas porque
+
+00:03:34.970 --> 00:03:41.550
+he estado casi dos semanas sin estropear por
+problemas logísticos pero bueno nos la idea
+
+00:03:41.550 --> 00:03:45.990
+vale la idea es que seguiré estrenando con
+más frecuencia de la que lo estoy haciendo
+
+00:03:45.990 --> 00:03:55.270
+así que bueno os voy a compartir la pantalla
+y vamos a ver lo que vamos a implementar
+
+00:03:55.270 --> 00:04:00.860
+bueno os enseño primero como quiero que quede
+vale si os acordáis el otro día estuvimos
+
+00:04:00.860 --> 00:04:09.730
+haciendo estas tarjetitas estuvimos mirando
+como traernos todos los datos del back end
+
+00:04:09.730 --> 00:04:16.070
+con todo el tema del wayer etcétera para
+hacer las llamadas app exile que ese caché
+
+00:04:16.070 --> 00:04:21.440
+cuando cuando se devuelven en la en la caché
+de cliente vale y hoy vamos a ir mejorando
+
+00:04:21.440 --> 00:04:28.370
+nuestras tarjetas en primer lugar bueno aquí
+en la aplicación que vamos a hacer un entre
+
+00:04:28.370 --> 00:04:35.240
+todos como veis pone si la planta es de exterior
+o de interior pero vamos a ponerle un poco
+
+00:04:35.240 --> 00:04:40.050
+más bonito y vamos a hacer que se utilice
+un icono hoy utilizaremos un componente que
+
+00:04:40.050 --> 00:04:45.350
+se llama life in my com y unos de los iconos
+que están disponibles en el line in the sun
+
+00:04:45.350 --> 00:04:51.090
+system vamos a ver también cómo realizar
+la navegación es decir que yo cuando le dé
+
+00:04:51.090 --> 00:04:58.650
+a este botón o cuando se ejecuta un evento
+de cualquier tipo yo pueda utilizar un servicio
+
+00:04:58.650 --> 00:05:04.979
+que se llama servicio de navegación para
+navegar al detalle de la planta oa cualquier
+
+00:05:04.979 --> 00:05:10.300
+otra página dentro de mi aplicación o dentro
+del sexos y os voy a explicar un poquito más
+
+00:05:10.300 --> 00:05:16.270
+sobre el tema del wayer vale porque sé que
+es un tema que es complicado de entender y
+
+00:05:16.270 --> 00:05:22.300
+me gustaría que quedase muy claro entonces
+voy a intentar explicarlo resumidamente de
+
+00:05:22.300 --> 00:05:27.300
+nuevo y vamos a hacer algunas pruebas para
+ver como todos esos datos se guardan en la
+
+00:05:27.300 --> 00:05:34.690
+caché o se borran el siguió vacío la caché
+y se volverá a traer del servidor hacer una
+
+00:05:34.690 --> 00:05:42.220
+nueva llamada next vale esto lo vamos a comprobar
+empíricamente por favor si no se oye si no
+
+00:05:42.220 --> 00:05:46.900
+se ve algo bien o lo que sea decir minimal
+es en principio según veo aquí todo debería
+
+00:05:46.900 --> 00:05:51.210
+estar
+
+00:05:51.210 --> 00:05:57.840
+buenas buenas loco divas que se queden david
+y sé que tú eres un experto en el wagener
+
+00:05:57.840 --> 00:06:02.960
+así que no te va a servir de mucho lo que
+yo te explique porque te podrías dar una
+
+00:06:02.960 --> 00:06:11.100
+clase magistral pero muchas gracias por esto
+bueno pues como os decía primero que vamos
+
+00:06:11.100 --> 00:06:19.449
+a hacer lo de los icónicos vale además eso
+nos va a servir para explicar una directiva
+
+00:06:19.449 --> 00:06:25.449
+que se llama template y la directiva template
+if es una directiva que nos va a permitir
+
+00:06:25.449 --> 00:06:34.020
+mostrar trozos de html vale o trozos de componentes
+puede sí decirlo de forma dinámica en base
+
+00:06:34.020 --> 00:06:42.069
+a sí parámetro de una propiedad que le pasamos
+es verdadera o es falsa es similar a cuando
+
+00:06:42.069 --> 00:06:48.889
+vimos la directiva de template for each vale
+pero en este caso pues sería template is
+
+00:06:48.889 --> 00:06:55.770
+true tengo aquí la documentación me dice
+es una template a para reutilizar elementos
+
+00:06:55.770 --> 00:07:01.630
+del dom de forma condicional y básicamente
+cómo funciona es que puedo poner estruch
+
+00:07:01.630 --> 00:07:07.699
+o default y entonces enseñar una propiedad
+porque voy a utilizar esta temprada electric
+
+00:07:07.699 --> 00:07:15.100
+bueno porque yo quiero que si el icono bueno
+que si en ami la información que me viene
+
+00:07:15.100 --> 00:07:21.650
+de la planta es que es una planta de exterior
+me muestre un icono que va a ser el solecito
+
+00:07:21.650 --> 00:07:26.670
+vale y si me viene que es una planta de interior
+de hecho me puede venir que sea de los dos
+
+00:07:26.670 --> 00:07:34.710
+interior y exterior que me muestre el icono
+de una entonces para ello lo que voy a hacer
+
+00:07:34.710 --> 00:07:42.810
+es irme al código como siempre vamos a abrir
+nuestro componente style que era el que ponía
+
+00:07:42.810 --> 00:07:48.729
+toda la información de una planta en particular
+no y si recordáis la forma en la que estábamos
+
+00:07:48.729 --> 00:07:56.389
+mostrando el location era así de sencilla
+vale simplemente mostramos el contenido de
+
+00:07:56.389 --> 00:08:01.370
+esta propiedad que va a ser básicamente una
+cadena de caracteres y ahora lo que vamos
+
+00:08:01.370 --> 00:08:06.970
+a hacer es ligeramente diferente vamos a utilizar
+este contenido para renderizar un icono si
+
+00:08:06.970 --> 00:08:11.000
+es de interior lo siguiente interior entonces
+bueno como os decía el primero que vamos
+
+00:08:11.000 --> 00:08:21.889
+a hacer es escribir una template a directive
+vamos a decir que quiero mostrar si es verdadero
+
+00:08:21.889 --> 00:08:27.530
+bueno aquí no puedo poner directamente algo
+así vale este es el punto location igual
+
+00:08:27.530 --> 00:08:34.430
+aunque esto no se puede hacer por tema de
+seguridad porque esto podría dar lugar a
+
+00:08:34.430 --> 00:08:39.349
+que los hay script y en el poder escribir
+código javascript directamente en el templete
+
+00:08:39.349 --> 00:08:45.649
+entonces lo que tendremos que hacer es crear
+algo en el código javascript que nos devuelva
+
+00:08:45.649 --> 00:08:52.080
+directamente una propiedad que haga esta comprobación
+pues yo a esa propiedad le voy a llamar de
+
+00:08:52.080 --> 00:08:59.860
+momento y autos vale entonces lo que vamos
+a hacer es que si es outdoors y aquí lo que
+
+00:08:59.860 --> 00:09:10.029
+haremos será mostrar el icono del sol vale
+voy a copiar me esto y vamos a crear otra
+
+00:09:10.029 --> 00:09:16.070
+propiedad que va a hacer que si es 2 que se
+podría hacer de muchas maneras podría hacer
+
+00:09:16.070 --> 00:09:22.450
+bueno e iba a decir que podría hacer si no
+es autors pero no es cierto porque puede tener
+
+00:09:22.450 --> 00:09:26.800
+las dos propiedades vale puede que sea era
+un pic turismo y select y entonces puede ser
+
+00:09:26.800 --> 00:09:31.760
+que la planta sea tanto de interior como en
+exterior entonces en este caso lo que vamos
+
+00:09:31.760 --> 00:09:41.650
+a hacer es que vamos a mostrar el icono de
+la casa le voy a quitar interesa y bueno vamos
+
+00:09:41.650 --> 00:09:43.600
+a ver cómo serían estos iconos
+
+00:09:43.600 --> 00:09:53.390
+para ver los iconos bueno el componente que
+voy a utilizar sería éste lighting icon
+
+00:09:53.390 --> 00:09:59.640
+vale que coge los iconos del line in the sun
+system aquí te vienen diferentes variedades
+
+00:09:59.640 --> 00:10:05.160
+de iconos que se pueden utilizar y entonces
+yo el otro día que estuve viendo los icónicos
+
+00:10:05.160 --> 00:10:10.829
+que había encontré dos que más o menos
+representaban lo que yo quiero representarnos
+
+00:10:10.829 --> 00:10:15.459
+una planta que es de interior y una planta
+que es de exterior entonces se encontré uno
+
+00:10:15.459 --> 00:10:17.589
+que era una casita
+
+00:10:17.589 --> 00:10:19.230
+sin más
+
+00:10:19.230 --> 00:10:31.750
+o sea mejor este de aquí vale no era una
+casita del interior y encontré otro por aquí
+
+00:10:31.750 --> 00:10:37.673
+abajo que era un sol esto de afirma la ley
+dije venga pues voy a utilizar este también
+
+00:10:37.673 --> 00:10:44.140
+entonces sería tan sencillo como yo utiliza
+de componente lighting icon y ponerle el nombre
+
+00:10:44.140 --> 00:10:51.600
+que le quiero poner me voy a copiar de aquí
+este mismo por ejemplo y aquí vamos a poner
+
+00:10:51.600 --> 00:11:01.410
+el sol que era el castro gastón 3 esto es
+simplemente porque pertenece a la categoría
+
+00:11:01.410 --> 00:11:08.790
+gastón vale de estos que hemos visto de argentos
+ya que con el castor y luego gastón 3
+
+00:11:08.790 --> 00:11:13.920
+el alternative test va a ser el que se utilice
+por los escribir líderes y todo eso para
+
+00:11:13.920 --> 00:11:23.660
+accesibilidad entonces estaría bien ponerle
+algo que tenga significado vale aquí el mismo
+
+00:11:23.660 --> 00:11:34.220
+el mismo título vale ese sería el del autor
+para el indoors pues vamos a crear el icono
+
+00:11:34.220 --> 00:11:39.820
+que va a ser el icono este en este caso está
+en la categoría estándar vale y va a ser
+
+00:11:39.820 --> 00:11:48.470
+el icono entonces voy a cambiar en este caso
+el texto alternativo y el título para que
+
+00:11:48.470 --> 00:11:56.089
+diga indoors y esto ya lo tendríamos vale
+entonces que nos faltaría definir aquí bueno
+
+00:11:56.089 --> 00:12:01.980
+pues este esta propiedad y esta propiedad
+es algo que debemos definir como os he dicho
+
+00:12:01.980 --> 00:12:09.279
+antes en el fichero ya que entonces lo que
+vamos a hacer es que aquí pues acordaros
+
+00:12:09.279 --> 00:12:17.690
+que teníamos que especie punto location aquí
+me puede venir esto puede ser un 2 me puede
+
+00:12:17.690 --> 00:12:21.860
+venir también que sea
+
+00:12:21.860 --> 00:12:29.420
+outdoors y me puede venir que sea de las dos
+que en este caso me vendría separado por
+
+00:12:29.420 --> 00:12:36.639
+una coma estas son las tres posibilidades
+entonces como puedo definir yo una propiedad
+
+00:12:36.639 --> 00:12:45.750
+a la cual se le asigne un valor o se auto
+calculó un valor que yo pueda después consultar
+
+00:12:45.750 --> 00:12:54.970
+aquí o hacer bending en el html para que
+evalúe esa propiedad cuando sea necesario
+
+00:12:54.970 --> 00:13:00.260
+como puedo hacer eso pues eso se puede hacer
+con una funcionalidad que se llama haters
+
+00:13:00.260 --> 00:13:07.101
+marketers y sets básicamente es lo mismo
+que definir la propiedad como tal lo único
+
+00:13:07.101 --> 00:13:13.959
+que vamos a hacer es que el comportamiento
+bueno el valor que va a almacenar esa propiedad
+
+00:13:13.959 --> 00:13:19.230
+va a recalcular se cada vez que cambie alguna
+de las propiedades que estamos utilizando
+
+00:13:19.230 --> 00:13:25.269
+en el 20° explicó eso mejor mal entonces
+la propiedad que quiero crear se llama i sound
+
+00:13:25.269 --> 00:13:35.110
+2 y autos y como es un éter gates lo que
+tenemos que hacer es devolver un valor yo
+
+00:13:35.110 --> 00:13:40.279
+aquí podría devolver pues no se podría
+devolver siempre truck no tendría mucho sentido
+
+00:13:40.279 --> 00:13:45.050
+podría devolver un este lo que ellos lo que
+yo quiera aquí que es lo que tiene sentido
+
+00:13:45.050 --> 00:13:53.480
+pues es que comprobemos si es especie location
+
+00:13:53.480 --> 00:14:04.540
+contiene en dos autos y para esto en javascript
+hay un método que es
+
+00:14:04.540 --> 00:14:16.570
+incluso incluso que entonces para ver si un
+string contiene algo pues podemos hacer esto
+
+00:14:16.570 --> 00:14:25.360
+decimos sí el string contiene autos esto
+me va a devolver true y vamos a hacer lo mismo
+
+00:14:25.360 --> 00:14:34.350
+para el windows cuál es el string contiene
+un 2 esto me va a devolver truck entonces
+
+00:14:34.350 --> 00:14:45.170
+en principio esto debería funcionar voy a
+ver si tengo algo más por ahí
+
+00:14:45.170 --> 00:14:49.589
+y esto lo tengo y así
+
+00:14:49.589 --> 00:14:54.470
+[Música] perfecto vale bueno pues vamos a
+subir nuestro código y mientras voy a mirar
+
+00:14:54.470 --> 00:15:03.009
+el chat porque he visto una pregunta vale
+vale estar aquí nivel 44 buenas tardes haber
+
+00:15:03.009 --> 00:15:08.020
+visto el contenido un par de veces y me parece
+muy interesante muchas gracias que recomiendas
+
+00:15:08.020 --> 00:15:11.360
+para sacar el pse después de dolor pero no
+estoy haciendo una enfermedad informática
+
+00:15:11.360 --> 00:15:17.040
+de no tengo mucho tiempo para estudiar
+
+00:15:17.040 --> 00:15:24.649
+una muy buena pregunta el sexo es de lo perú
+no o si no lo conocéis los que estáis conectados
+
+00:15:24.649 --> 00:15:32.759
+es una certificación de sexos es un examen
+al cual tú te presentas veis tipo text y
+
+00:15:32.759 --> 00:15:39.019
+si consigues esa acreditación bueno pues
+que tienes un número de certificación vale
+
+00:15:39.019 --> 00:15:43.880
+que tú puedes enseñar en tu empresa oa tus
+clientes o quien sea para demostrar que tú
+
+00:15:43.880 --> 00:15:50.649
+eres un desarrollador certificado de selfoss
+hay muchísimas certificaciones y la que comenta
+
+00:15:50.649 --> 00:15:56.820
+el nivel es la cers force de pelo peruano
+
+00:15:56.820 --> 00:16:04.770
+yo lo primero que recomiendo siempre es venir
+aquí a 3g que es donde te viene toda la especificación
+
+00:16:04.770 --> 00:16:12.100
+de lo que entra en el examen y leerse bien
+todo lo que viene aquí vale en primer lugar
+
+00:16:12.100 --> 00:16:17.040
+lo que te dicen es la guía de examen la guía
+de examen es muy importante porque la guía
+
+00:16:17.040 --> 00:16:25.949
+de examen te dice qué porcentajes de qué
+temas te van a preguntar en la certificación
+
+00:16:25.949 --> 00:16:32.670
+vale entonces por ejemplo aquí en examen
+outline vais a poder ver esos eso entonces
+
+00:16:32.670 --> 00:16:39.759
+yo aquí quiere pues que de la certificación
+me van a preguntar un 7% de selfoss fundamentals
+
+00:16:39.759 --> 00:16:45.620
+y que incluye self los fundamentals pues incluye
+esto esto y esto vale me van a preguntar un
+
+00:16:45.620 --> 00:16:52.640
+40% the process automation and logic y una
+quimera preguntar pues ese o huele de ml me
+
+00:16:52.640 --> 00:17:00.199
+van a preguntar de cómo van las transacciones
+de apex vale entonces por qué digo esto pero
+
+00:17:00.199 --> 00:17:05.250
+para mí es muy importante cuando te vas a
+sacar una certificación hacerse un plan de
+
+00:17:05.250 --> 00:17:10.549
+estudios 6 force es muy grande y si tú no
+tienes un plan de las zonas casa de dedicar
+
+00:17:10.549 --> 00:17:17.959
+a cada tema se te puede hacer infinito vale
+por estudiar desarrollo de sexos puedes estar
+
+00:17:17.959 --> 00:17:25.429
+después horas y horas y semanas y meses estudiando
+necesitas acepte un plan de estudio y concretar
+
+00:17:25.429 --> 00:17:32.500
+cuánto tiempo quieres dedicar a cada uno
+de los temas para pues más o menos distribuir
+
+00:17:32.500 --> 00:17:37.670
+el tiempo que tengas pensado estudiar con
+el examen y que no se te vaya la olla por
+
+00:17:37.670 --> 00:17:44.179
+ejemplo en invirtiendo mucho tiempo pues no
+sé pues por ejemplo en esta parte de aquí
+
+00:17:44.179 --> 00:17:50.570
+que solamente el 7 por ciento vale en esta
+certificación vienen los porcentajes son
+
+00:17:50.570 --> 00:17:56.050
+bastante grandes pero por ejemplo yo me estudiar
+alguna de las cuales había preguntas que
+
+00:17:56.050 --> 00:18:02.820
+eran un 3% de la certificación vale yo lo
+que hacía era que para un 3% de edad si no
+
+00:18:02.820 --> 00:18:07.830
+era algo que realmente me interesaba que directamente
+me de lo miran vale porque dices pues es que
+
+00:18:07.830 --> 00:18:13.980
+en 3% me va a caer una pregunta vale entonces
+lo primero venir aquí ver lo que cae y hacerte
+
+00:18:13.980 --> 00:18:20.190
+un plan de estudio luego en segundo lugar
+hay un montón de módulos suena bien digamos
+
+00:18:20.190 --> 00:18:26.950
+la vía de estudio la página de la certificación
+la anterior que hemos visto bien en varios
+
+00:18:26.950 --> 00:18:34.100
+módulos de 13 que te recomiendan que hagas
+para ir aprendiendo las diferentes secciones
+
+00:18:34.100 --> 00:18:40.660
+si yo sigo contando vale bueno habíamos deplorado
+el código a la organización entonces sobre
+
+00:18:40.660 --> 00:18:49.950
+lo que voy a hacer es que voy a refrescar
+y vamos a ver cómo se me ha quedado esto
+
+00:18:49.950 --> 00:18:55.900
+bueno él no está situado en el sitio que
+quiero pero como veis ya sí que me sale si
+
+00:18:55.900 --> 00:18:59.190
+la planta es de exterior me sale solecito
+y si es de interior me sale esto lo que voy
+
+00:18:59.190 --> 00:19:04.140
+a hacer es que voy a poner una planta que
+sea de interior y de exterior vale por ejemplo
+
+00:19:04.140 --> 00:19:13.080
+venga vamos a poner el perejil interior y
+exterior para que me salgan los dos y con
+
+00:19:13.080 --> 00:19:14.080
+hitos
+
+00:19:14.080 --> 00:19:19.380
+y lo veamos también
+
+00:19:19.380 --> 00:19:26.320
+entonces aquí vamos a refrescar
+
+00:19:26.320 --> 00:19:32.750
+y aquí vemos que me salen los dos y bonitos
+va lento de nuestro template if ha funcionado
+
+00:19:32.750 --> 00:19:39.440
+como voy a ponerlo centrado bueno pues con
+él la clase del lighting design system que
+
+00:19:39.440 --> 00:19:45.049
+vimos el otro día que sería
+
+00:19:45.049 --> 00:19:52.970
+si ya directamente lo copió slds alain absolute
+frente le voy a poner también un pequeño
+
+00:19:52.970 --> 00:19:59.730
+padín horizontal para que no se me juntó
+en los iconos vale y ya los voy a meter aquí
+
+00:19:59.730 --> 00:20:09.440
+no sé por qué puse un p pero vamos a imponiendo
+un día mejor que tiene más sentido una vez
+
+00:20:09.440 --> 00:20:13.230
+el auto completa
+
+00:20:13.230 --> 00:20:27.700
+voy a desplegar otra vez y vamos a ver qué
+resultados tenemos
+
+00:20:27.700 --> 00:20:32.730
+venga pues ya lo tenemos como queríamos no
+sé por qué tengo algo de 16 se mal en esta
+
+00:20:32.730 --> 00:20:40.580
+hora que lo tengo que mirar y admirar y posiblemente
+ios developer porque esto se me olvida una
+
+00:20:40.580 --> 00:20:43.780
+máxima vida por medio no sé si tenéis alguna
+pregunta por internet más preguntas de las
+
+00:20:43.780 --> 00:20:48.540
+certificaciones o de lo que estamos viendo
+no sé cualquier cosa me lo decís vale
+
+00:20:48.540 --> 00:20:58.470
+muy bien bueno pues vamos con la otra tarea
+que teníamos quiero que cuando yo le dé
+
+00:20:58.470 --> 00:21:06.190
+aquí al beauty tails me navegue a la página
+de detalle de cada planta que sería esta
+
+00:21:06.190 --> 00:21:12.090
+de aquí uno cuando yo le doy aquí digamos
+la interfaz que me creas el flores por defecto
+
+00:21:12.090 --> 00:21:16.720
+yo le doy a cada registro esto siempre me
+lleva a la página que se llama de detalle
+
+00:21:16.720 --> 00:21:25.159
+que si os fijáis siempre la url es line in
+especies el id de la planta y green vale antes
+
+00:21:25.159 --> 00:21:31.190
+lo que se hacía era que para navegar a estas
+páginas pues como todos sabíamos que la
+
+00:21:31.190 --> 00:21:37.169
+url era patata ta ta ta ta ta ta sehar codeaba
+y hasta pero eso se convirtió en una mala
+
+00:21:37.169 --> 00:21:43.650
+práctica porque si hay sos bueno en cualquier
+momento puede cambiar esa url y no queremos
+
+00:21:43.650 --> 00:21:49.250
+que se haga de forma a jarkko death vale de
+hecho esto ocurrió cuando se cambió de classic
+
+00:21:49.250 --> 00:21:55.350
+a lightning que todas las urls cambiar entonces
+cómo lo vamos a hacer es de la forma correcta
+
+00:21:55.350 --> 00:22:02.679
+la buena práctica que sería usando el navigation
+service vale la direcciòn services vamos
+
+00:22:02.679 --> 00:22:05.740
+a buscar aquí en la documentación
+
+00:22:05.740 --> 00:22:15.750
+navigation services pues es un servicio un
+módulo que yo puedo importar en main in west
+
+00:22:15.750 --> 00:22:21.340
+components y que me va a permitir navegar
+a diferentes páginas y males me va a permitir
+
+00:22:21.340 --> 00:22:31.070
+aquí vienen todos los ejemplos de las páginas
+pues por ejemplo navegar al home de un objeto
+
+00:22:31.070 --> 00:22:40.779
+donde un objeto sería esto de aquí vale
+me va a permitir navegar a list view una la
+
+00:22:40.779 --> 00:22:47.960
+vista de por ejemplo todas las plantas navegar
+una página de registro navegar
+
+00:22:47.960 --> 00:23:00.630
+d recortes esto sería navegar a la página
+de crear nuevos registros que realmente es
+
+00:23:00.630 --> 00:23:06.749
+el modales de que te aparece cuando vas a
+crear un nuevo registro cuando yo le doy aquí
+
+00:23:06.749 --> 00:23:13.180
+a especies y new esto sería la página del
+nuevo registro pero yo lo que quiero es navegar
+
+00:23:13.180 --> 00:23:18.360
+a la página de detalle de registro de esas
+páginas se llaman news entonces realmente
+
+00:23:18.360 --> 00:23:26.669
+yo lo que quiero hacer es algo así entonces
+bueno vamos a ver cómo hacerlo y dice david
+
+00:23:26.669 --> 00:23:36.650
+en la línea 14 sobra un p pues puede ser
+que se me haya volado haber empleo
+
+00:23:36.650 --> 00:23:48.590
+luego rellano pues está bien muchas gracias
+y decía alguien algo más amable las line
+
+00:23:48.590 --> 00:23:56.029
+in web compones me apasionan a mí también
+me encanta que lo conozco es muy bueno vale
+
+00:23:56.029 --> 00:24:03.600
+entonces vamos a usar el servicio de navegación
+para usar el servicio de navegación lo primero
+
+00:24:03.600 --> 00:24:13.059
+que tenemos que hacer es importar el módulo
+para que dejen de import navigation mixing
+
+00:24:13.059 --> 00:24:21.960
+es un mix y un mix singh es una estructura
+estándar de javascript que permite añadir
+
+00:24:21.960 --> 00:24:27.010
+funcionalidad a una clase por si no lo conocéis
+o sea no es algo que nos hayamos inventado
+
+00:24:27.010 --> 00:24:30.980
+en salesforce mal entonces lo que hay que
+hacer si quiero que este componente utilice
+
+00:24:30.980 --> 00:24:40.000
+navigation mixing es que lo utilizamos aquí
+vale lo que hacemos es añadirle funcionalidad
+
+00:24:40.000 --> 00:24:45.440
+a la clase de lighting element utilizando
+un mix y como os digo esta nave ya va a ser
+
+00:24:45.440 --> 00:24:50.480
+una determina hemos inventado nosotros que
+más tengo que hacer
+
+00:24:50.480 --> 00:24:58.930
+vale pues me voy a copiar el ejemplo este
+ya lo cambiamos para que se adecue a lo que
+
+00:24:58.930 --> 00:25:08.980
+nosotros queremos hacer nadie entonces lo
+que queremos es navegar a la página de view
+
+00:25:08.980 --> 00:25:19.440
+el objeto que queremos ver es el especies
+el objeto al que queremos navegar te dice
+
+00:25:19.440 --> 00:25:26.320
+que es opcional porque es opcional porque
+el ide ya identifica el tipo de objeto que
+
+00:25:26.320 --> 00:25:31.760
+es normalmente los ideas de selfoss empiezan
+por una serie de caracteres y esa serie de
+
+00:25:31.760 --> 00:25:37.480
+caracteres identifica si es una count que
+es un aporte unity o si es un cartón o bien
+
+00:25:37.480 --> 00:25:43.419
+como yo me acabo de crear de un tipo determinado
+vale pero bueno vamos a dejarlo no pasa nada
+
+00:25:43.419 --> 00:25:49.110
+no nos molesta y bueno y que tendría que
+pasarle yo aquí el récord y vale de momento
+
+00:25:49.110 --> 00:25:55.289
+mira para hacer una prueba le vamos a pasar
+directamente un récord y dejar codeado vale
+
+00:25:55.289 --> 00:25:57.409
+y luego lo cambiamos
+
+00:25:57.409 --> 00:26:10.760
+para hacer la prueba simplemente de que funciona
+entonces esto sería un método vale la forma
+
+00:26:10.760 --> 00:26:17.520
+de llamar un método de un line in west component
+tiene que ser a través de gestionar un evento
+
+00:26:17.520 --> 00:26:21.480
+que ocurra en la página entonces lo que voy
+a hacer es que me ha copiado el nombre del
+
+00:26:21.480 --> 00:26:30.289
+método y lo que queremos es que cuando se
+hace clic en el botón que era este de aquí
+
+00:26:30.289 --> 00:26:38.480
+no hay ningún este es ver detalles queremos
+que en el evento clic
+
+00:26:38.480 --> 00:26:46.960
+se llame al método navigate tweet recorrdio
+page vale entonces de momento todos mis todas
+
+00:26:46.960 --> 00:26:53.220
+mis tarjetas van a llamar a este método y
+todos mis tarjetas van a navegar al perejil
+
+00:26:53.220 --> 00:26:54.820
+porque lohan
+
+00:26:54.820 --> 00:27:01.500
+mono y el action game es bien porque lo que
+queremos es verlo entonces voy a desplegar
+
+00:27:01.500 --> 00:27:08.460
+esto y vamos a ver cómo funciona
+
+00:27:08.460 --> 00:27:10.110
+[Música]
+
+00:27:10.110 --> 00:27:25.330
+barrio ya lo tenemos y ahora le de al cual
+le de esto debería navegar [Música]
+
+00:27:25.330 --> 00:27:36.760
+vale algo no está bien vale yo desde cualquiera
+de las tarjetas estoy navegando al perejil
+
+00:27:36.760 --> 00:27:45.890
+porque lo jarkko de como le pasaría el ide
+ah este método en lugar de utilizarlo así
+
+00:27:45.890 --> 00:27:53.090
+directamente bueno pues muy fácil porque
+recordad que yo tengo aquí la propiedad especie
+
+00:27:53.090 --> 00:28:04.909
+vale entonces yo puedo hacer aquí this especie
+punto y d y esto ya me pasaría de forma dinámica
+
+00:28:04.909 --> 00:28:16.179
+el id de cada especie para cada una de las
+plantas que estoy renderizado vale entonces
+
+00:28:16.179 --> 00:28:19.370
+volvemos a desplegar
+
+00:28:19.370 --> 00:28:24.679
+y vamos a probarlo
+
+00:28:24.679 --> 00:28:36.950
+sacándole relación vamos a refrescar y vamos
+a ver pues la hierbabuena me va a la yerba
+
+00:28:36.950 --> 00:28:45.279
+buena el jazmín evans jazmín y bueno pues
+ya vemos que me funciona entonces ya veis
+
+00:28:45.279 --> 00:28:51.880
+cómo utilizar el servicio de navegación
+es bastante útil para navegar a plantas y
+
+00:28:51.880 --> 00:28:58.590
+a plantas a páginas dentro de tu aplicación
+de 6 force y también sería bastante útil
+
+00:28:58.590 --> 00:29:07.019
+para todo el tema de por ejemplo si quiero
+crear un nuevo registro si quiero editar un
+
+00:29:07.019 --> 00:29:12.710
+registro etcétera etcétera eso realmente
+son páginas dentro de la aplicación de ese
+
+00:29:12.710 --> 00:29:18.450
+foro lo que pasa que con la interfaz de lightning
+experience son más bien como el pop up que
+
+00:29:18.450 --> 00:29:25.630
+te sale vale también nos sirve para navegar
+a ver vamos a venir aquí al page preferencias
+
+00:29:25.630 --> 00:29:33.100
+vale nos sirve para navegar a muchos otros
+sitios que ya os digo que es súper versátil
+
+00:29:33.100 --> 00:29:40.690
+y muy extenso por ejemplo puedes navegar a
+una aplicación directamente vale o a un registro
+
+00:29:40.690 --> 00:29:52.380
+pero abrirlo como parte de una aplicación
+en concreto puedes navegar a un line in componen
+
+00:29:52.380 --> 00:29:59.150
+que creo que tiene que estar expuesto en una
+line componente a un noble artículo que lo
+
+00:29:59.150 --> 00:30:04.740
+miréis que hay muchísimas opciones y siempre
+que tengáis que hacer una navegación pensar
+
+00:30:04.740 --> 00:30:12.429
+en el navigation service porque sería la
+forma la best practice vale y por último
+
+00:30:12.429 --> 00:30:17.070
+que más quería cubrir hoy bueno pues quería
+volver a echarle un ojo halo del 'guaje' y
+
+00:30:17.070 --> 00:30:24.190
+hacer una prueba de todo el tema del cáncer
+vale entonces si os comenté os acordáis
+
+00:30:24.190 --> 00:30:34.210
+dijimos qué para llamar a un método ápex
+de traerme datos desde el servidor habría
+
+00:30:34.210 --> 00:30:39.260
+dos formas de llamar a ese método de forma
+imperativa o con wayer pero que cuando son
+
+00:30:39.260 --> 00:30:44.490
+operaciones de lectura es recomendable hacerlo
+con wayer porque lo que hacemos es delegar
+
+00:30:44.490 --> 00:30:50.570
+la invocación del método a un servicio que
+se llama servicio wayer que va a reaccionar
+
+00:30:50.570 --> 00:30:59.820
+para traerse nuevos datos cuando sea necesaria
+mos método ápex que era este de aquí que
+
+00:30:59.820 --> 00:31:08.200
+devolvía a todas las especies lo hicimos
+cache hablé vale al hacerlo cache hable lo
+
+00:31:08.200 --> 00:31:12.910
+que estamos diciendo es que llamemos como
+ya vemos al método da igual si lo llamamos
+
+00:31:12.910 --> 00:31:20.300
+de forma imperativa o con wire que de hecho
+esto creo que lo dije mal en el vídeo anterior
+
+00:31:20.300 --> 00:31:26.090
+él y el cliente va a intentar cachear esos
+datos para evitar llamadas repetitivas en
+
+00:31:26.090 --> 00:31:36.970
+el servidor vale entonces lo que hacemos aquí
+es guayre ar el método de apex está dispuesto
+
+00:31:36.970 --> 00:31:43.330
+aquí mediante un módulo y haga es privar
+a una propiedad para que cada vez que el servicio
+
+00:31:43.330 --> 00:31:50.610
+como ayer ejecute ese método ápex y se traigan
+nuevos datos lo guardé en mi propiedad especies
+
+00:31:50.610 --> 00:31:57.580
+como esto es una propiedad y las propiedades
+son reactivas vale significa que cada vez
+
+00:31:57.580 --> 00:32:02.820
+que yo cambie el valor de una propiedad yo
+o el servicio wayer mi componente se va a
+
+00:32:02.820 --> 00:32:09.559
+realizar y va a mostrar la información actualizada
+de esa propiedad entonces qué ocurre quería
+
+00:32:09.559 --> 00:32:15.909
+enseñar lo que ocurre con las llamadas de
+red
+
+00:32:15.909 --> 00:32:19.750
+para que veamos cómo funciona esto del caché
+vale entonces qué ocurre si yo ahora mismo
+
+00:32:19.750 --> 00:32:25.470
+acabo de vaciar la caché vale he hecho un
+command shift r para que haga todas las llamadas
+
+00:32:25.470 --> 00:32:33.450
+que tenga que hacer entonces si yo busco aquí
+llamadas de apex vale vamos a ver que aquí
+
+00:32:33.450 --> 00:32:37.549
+me aparece la llamada que he hecho de apex
+lo subo porque seguramente con la cámara
+
+00:32:37.549 --> 00:32:43.179
+se me estaba tapando vale lo que he hecho
+ha sido abrir la tarjetita de red y una tarjeta
+
+00:32:43.179 --> 00:32:50.000
+la tap the network y escribir aquí ápex
+para filtrar las acciones que me salen vale
+
+00:32:50.000 --> 00:32:56.630
+y entonces aquí veo pues que se ha hecho
+una petición de apex vale y fijaros que la
+
+00:32:56.630 --> 00:33:06.700
+respuesta esto es una respuesta de jason que
+me envía el servidor con la respuesta de
+
+00:33:06.700 --> 00:33:11.019
+este método de aquí
+
+00:33:11.019 --> 00:33:19.790
+entonces qué ocurre si yo ahora actualizó
+la página pero creo que tener abierto vale
+
+00:33:19.790 --> 00:33:30.649
+yo ahora actualizó la página sin refrescar
+la cancha actualice la página
+
+00:33:30.649 --> 00:33:31.649
+y si yo la escribo aquí ápex
+
+00:33:31.649 --> 00:33:46.769
+no sé lo que me la ha devuelto otra vez en
+este camino
+
+00:33:46.769 --> 00:33:53.039
+vale no sé por qué está haciendo la llamada
+de apex otra vez como os dije esto no me lo
+
+00:33:53.039 --> 00:33:58.049
+preparo mucho porque quiero que se vea real
+también lo que estoy haciendo
+
+00:33:58.049 --> 00:34:08.280
+y esto no debería estar devolviendo me de
+nuevo la respuesta porque se supone que ya
+
+00:34:08.280 --> 00:34:09.929
+está cacheada
+
+00:34:09.929 --> 00:34:11.599
+dejadme que lo mire tranquilamente
+
+00:34:11.599 --> 00:34:35.290
+dejadme que lo mire tranquilamente yo os digo
+no sé si es que necesito
+
+00:34:35.290 --> 00:34:41.589
+no sé si es que lo que ocurre es que la caché
+solamente guarda la información cuando no
+
+00:34:41.589 --> 00:34:46.609
+refrescar la página es decir que si yo tuviera
+aquí por ejemplo unos filtros que me estuvieran
+
+00:34:46.609 --> 00:34:51.480
+volviendo a hacer la llamada al componente
+pero sin recargar me lo que es el hay ningún
+
+00:34:51.480 --> 00:34:57.910
+componente entero entonces es cuando me funcionaría
+el caché o vale yo creo que va a ser eso
+
+00:34:57.910 --> 00:35:03.250
+os lo puedo enseñar con otra aplicación
+que tenemos que se llama grindhouse déjame
+
+00:35:03.250 --> 00:35:09.410
+que la abre un momentito sí a ver si la tengo
+si la tengo desplegada y es lo enseño porque
+
+00:35:09.410 --> 00:35:14.790
+sé que en ese caso de uso funciona seguro
+seguro seguro y esto pues no voy a entrar
+
+00:35:14.790 --> 00:35:20.849
+yo vivo dice habéis puede ser por el modo
+debajo no lo tengo claro claro es por eso
+
+00:35:20.849 --> 00:35:26.660
+gracias david muchas gracias ya os he dicho
+que david es un crack que lo conozco yo que
+
+00:35:26.660 --> 00:35:35.300
+trabaja en granadas y es un súper crack vamos
+a hacer una cosa es que claro no solamente
+
+00:35:35.300 --> 00:35:41.740
+tenía el debat moat sino que desactiven el
+castillo jaja
+
+00:35:41.740 --> 00:35:53.830
+un amor vamos a activarlo de nuevo y voy a
+quitar el modo debajo
+
+00:35:53.830 --> 00:36:08.430
+este este vale ahí está el cacheo y vamos
+a evitar el modo de baja just in case
+
+00:36:08.430 --> 00:36:15.310
+deshabilitar vale y si ya no me funciona así
+os enseño lo de drink house y aclaró qué
+
+00:36:15.310 --> 00:36:21.060
+es lo que ocurre con eso entonces ahora lo
+que hago es que voy a recargar todo de nuevo
+
+00:36:21.060 --> 00:36:26.910
+le daba el coma en chiste vale y aquí me
+sale la acción aquí estaría mi respuesta
+
+00:36:26.910 --> 00:36:32.089
+si os fijáis con el modo de base se veía
+mucho más claro verdad esas son algunas de
+
+00:36:32.089 --> 00:36:36.640
+las funcionalidades que te aporta el tener
+el debat mod activado que el diwali sea mucho
+
+00:36:36.640 --> 00:36:43.570
+más sencillo porque te viene todo significar
+entonces ahora voy a esto lo limpio y voy
+
+00:36:43.570 --> 00:36:47.829
+a actualizar de nuevo
+
+00:36:47.829 --> 00:36:53.450
+no pues sigue pasando vale entonces bueno
+lo voy a investigar y os digo ya os digo que
+
+00:36:53.450 --> 00:36:59.630
+con con un filtro en la página no debería
+de pasar voy a ver si tengo la aplicación
+
+00:36:59.630 --> 00:37:06.670
+de greenhouse desplegada y si la tengo desplegada
+la enseño y si no nos la diseño porque no
+
+00:37:06.670 --> 00:37:15.819
+me da tiempo pero os la diseño de personalidad
+esto
+
+00:37:15.819 --> 00:37:20.770
+por ahí
+
+00:37:20.770 --> 00:37:28.200
+[Música] nada misterioso
+
+00:37:28.200 --> 00:37:44.310
+un poco vale no la tengo desplegado no pasa
+nada porque así lo que yo tranquilamente
+
+00:37:44.310 --> 00:37:49.400
+y el próximo día os digo a ver por qué
+no me funcionaba no sé si será un tema de
+
+00:37:49.400 --> 00:37:55.540
+lo del calcio como decía la vid o es que
+solamente funciona si yo ya tengo cargados
+
+00:37:55.540 --> 00:38:00.860
+los componentes y estoy haciendo digamos el
+cambio dinámico de esos componentes siempre
+
+00:38:00.860 --> 00:38:07.640
+cargar la página vale que quiero hacer eso
+bueno pues esto es todo lo que os quería
+
+00:38:07.640 --> 00:38:14.160
+enseñar hoy que muchísimas gracias por conectarlos
+como siempre el siguiente día lo que voy
+
+00:38:14.160 --> 00:38:20.200
+a hacer es empezar ya con el tema de las scratch
+yours vale está todo el rato desplegando
+
+00:38:20.200 --> 00:38:25.410
+en una hora de desarrollo porque no quería
+meterme mucho lío y quería enseñarles primero
+
+00:38:25.410 --> 00:38:31.119
+un poco la experiencia de desarrollo como
+es y sobre todo pues que os familiar y 6 con
+
+00:38:31.119 --> 00:38:36.640
+el tipo de código que se escribe y demás
+y ya el siguiente día pues me voy a meter
+
+00:38:36.640 --> 00:38:42.280
+más en cómo sería el ciclo de desarrollo
+de aplicaciones con scratch yours que sería
+
+00:38:42.280 --> 00:38:48.030
+la buena práctica recomendado sobre todo
+pues si estáis empezando nada que espero
+
+00:38:48.030 --> 00:38:53.390
+que hayáis disfrutado que muchísimas gracias
+a todos los que os habéis conectado y ya
+
+00:38:53.390 --> 00:39:18.910
+subir el vídeo a youtube como siempre nos
+vemos de la próxima chao
+
+00:39:18.910 --> 00:39:22.859
+[Música]
+
+00:39:22.859 --> 00:39:26.819
+y
+
+00:39:26.819 --> 00:39:46.599
+a a [Música] ah [Música]
+
+00:39:46.599 --> 00:39:54.510
+i [Música]
+
+00:39:54.510 --> 00:39:58.460
+y
+

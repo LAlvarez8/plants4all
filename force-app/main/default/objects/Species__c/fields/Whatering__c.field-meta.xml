@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Whatering__c</fullName>
+    <label>Watering</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Low (1 vez por semana)</fullName>
+                <default>false</default>
+                <label>Low (1 vez por semana)</label>
+            </value>
+            <value>
+                <fullName>Medium (2-3 veces por semana)</fullName>
+                <default>false</default>
+                <label>Medium (2-3 veces por semana)</label>
+            </value>
+            <value>
+                <fullName>High (diario)</fullName>
+                <default>false</default>
+                <label>High (diario)</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
