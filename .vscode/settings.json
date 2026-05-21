@@ -5,5 +5,22 @@
     "**/.sf": true,
     "**/.sfdx": true
   },
-  "xml.preferences.showSchemaDocumentationType": "none"
+
+  "xml.preferences.showSchemaDocumentationType": "none",
+
+  "salesforcedx-vscode-apex.java.memory": 1024,
+
+  "editor.minimap.enabled": false,
+  "git.autofetch": false,
+  "editor.codeLens": false,
+  "editor.inlineSuggest.enabled": false,
+  "extensions.autoUpdate": false,
+
+  "workbench.editor.enablePreview": false,
+  "telemetry.telemetryLevel": "off",
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true
+  }
 }

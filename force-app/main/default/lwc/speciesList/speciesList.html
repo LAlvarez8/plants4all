@@ -1,32 +1,30 @@
 <template>
-    <template if:true={species}>
-        <template if:true={species.data}>
-            <div class="slds-align_absolute-center">
-                <lightning-input type="text" label="Enter some text" onchange={handleInputChange}></lightning-input>
+  ```
+  <template if:true={species}>
+    <template if:true={species.data}>
+      <div class="slds-align_absolute-center">
+        <lightning-input
+          type="text"
+          label="Enter some text"
+          onchange={handleInputChange}
+        >
+        </lightning-input>
+      </div>
+
+      <div class="container">
+        <div class="species-grid">
+          <template for:each={species.data} for:item="specie">
+            <div key={specie.Id} class="species-column">
+              <c-species-tile species={specie}> </c-species-tile>
             </div>
-
-            <div class="container">
-
-                <div class="species-grid">
-                    
-                    <template for:each={species.data} for:item="specie">
-                        <div 
-                            key={specie.Id} 
-                            class="species-column">
-                            
-                            <c-species-tile species={specie}></c-species-tile>
-
-                        </div>
-                    </template>
-
-                </div>
-
-            </div>
-
-        </template>
+          </template>
+        </div>
+      </div>
     </template>
 
     <template if:true={species.error}>
-        <p>Error cargando datos</p>
+      <p>Error cargando datos</p>
     </template>
+  </template>
+  ```
 </template>
