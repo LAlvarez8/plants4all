@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Permisos para usuarios de Plants4All (acceso a Species y campos)</description>
+    <description
+  >Permisos para usuarios de Plants4All (acceso a Species y campos)</description>
     <fieldPermissions>
         <editable>false</editable>
         <field>Species__c.Description__c</field>
@@ -9,6 +10,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Species__c.Ideal_Max_Temperature__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Species__c.Ideal_Min_Temperature__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
