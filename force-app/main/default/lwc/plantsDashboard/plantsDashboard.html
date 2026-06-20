@@ -1,0 +1,74 @@
+<template>
+  <section class="dashboard">
+    <template if:true={dashboard}>
+      <article class="chart-card">
+        <header class="chart-title">Plantas por especie</header>
+        <div class="donut-layout">
+          <div class="donut" style={speciesDonutStyle}>
+            <span>{totalPlants}</span>
+          </div>
+          <ul class="legend">
+            <template for:each={speciesRows} for:item="row">
+              <li key={row.label}>
+                <span class="legend-dot" style={row.dotStyle}></span>
+                <span>{row.label}</span>
+              </li>
+            </template>
+          </ul>
+        </div>
+      </article>
+
+      <article class="chart-card">
+        <header class="chart-title">Plantas pendientes de fertilización</header>
+        <div class="bar-chart">
+          <template for:each={fertilizationRows} for:item="row">
+            <div class="bar-row" key={row.label}>
+              <span class="bar-label">{row.label}</span>
+              <span class="bar-track">
+                <span class="bar-fill" style={row.barStyle}>
+                  <span>{row.value}</span>
+                </span>
+              </span>
+            </div>
+          </template>
+        </div>
+      </article>
+
+      <article class="chart-card">
+        <header class="chart-title">Plantas por dueño</header>
+        <div class="column-chart">
+          <template for:each={ownerRows} for:item="row">
+            <div class="column-item" key={row.label}>
+              <div class="column-track">
+                <span class="column-fill" style={row.columnStyle}>
+                  <span>{row.value}</span>
+                </span>
+              </div>
+              <span class="column-label">{row.label}</span>
+            </div>
+          </template>
+        </div>
+      </article>
+
+      <article class="chart-card">
+        <header class="chart-title">Pendientes de riego</header>
+        <div class="bar-chart">
+          <template for:each={wateringRows} for:item="row">
+            <div class="bar-row" key={row.label}>
+              <span class="bar-label">{row.label}</span>
+              <span class="bar-track">
+                <span class="bar-fill" style={row.barStyle}>
+                  <span>{row.value}</span>
+                </span>
+              </span>
+            </div>
+          </template>
+        </div>
+      </article>
+    </template>
+
+    <template if:true={error}>
+      <div class="empty-state">No se pudo cargar el dashboard.</div>
+    </template>
+  </section>
+</template>
