@@ -32,6 +32,7 @@
     </profileActionOverrides>
     <tabs>Species__c</tabs>
     <tabs>Species_Explorer</tabs>
+    <tabs>Plant__c</tabs>
     <tabs>Dashboard</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>My_Plants_UtilityBar</utilityBar>
