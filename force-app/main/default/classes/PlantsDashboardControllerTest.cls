@@ -2,17 +2,25 @@
 private class PlantsDashboardControllerTest {
   @TestSetup
   static void createData() {
+    // Obtener un valor válido del picklist Locationes__c
+    String locationesValue = '';
+    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
+    List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
+    if (!picklistEntries.isEmpty()) {
+      locationesValue = picklistEntries[0].getValue();
+    }
+
     Species__c aloe = new Species__c(
       Name = 'Aloe Vera',
       Location__c = 'Indoors',
-      Locationes__c = 'Tropical',
+      Locationes__c = locationesValue,
       Whatering__c = 'Low (1 vez por semana)',
       Fertilization__c = 'Low (cada mes)'
     );
     Species__c perejil = new Species__c(
       Name = 'Perejil',
       Location__c = 'Outdoors',
-      Locationes__c = 'Tropical',
+      Locationes__c = locationesValue,
       Whatering__c = 'High (diario)',
       Fertilization__c = 'Medium (cada 2 semanas)'
     );
