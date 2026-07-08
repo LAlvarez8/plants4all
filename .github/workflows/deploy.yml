@@ -16,19 +16,22 @@ jobs:
       - name: Instalar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
 
-      - name: Instalar Salesforce CLI con npm
+      - name: Instalar Salesforce CLI
         run: |
           npm install @salesforce/cli --location=global
-          npm_prefix=$(npm config get prefix)
-          echo "$npm_prefix/bin" >> $GITHUB_PATH
+          echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
-      - name: Verificar instalación de sf
-        run: sf version
+      - name: Verificar instalación
+        run: sf --version
 
       - name: Autenticarse con Dev Hub
-        run: echo ${{ secrets.SFDX_AUTH_URL }} > sfdx_auth.txt && sf org login sfdx-url -f sfdx_auth.txt -a devhub
+        env:
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+        run: |
+          echo "$SFDX_AUTH_URL" > auth.txt
+          sf org login sfdx-url -f auth.txt -a devhub -d
 
-      - name: Desplegar código a la org
-        run: sf project deploy start --source-dir force-app --target-org devhub
+      - name: Deploy a la org
+        run: sf project deploy start --source-dir force-app --target-org devhub --wait 10
