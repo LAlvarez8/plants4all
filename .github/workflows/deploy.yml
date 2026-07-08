@@ -15,7 +15,10 @@ jobs:
 
       - name: Instalar Salesforce CLI
         run: |
-          curl -sSL https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/install.sh | bash
+          curl -sSL https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf.tar.xz -o sf.tar.xz
+          mkdir -p ~/sf
+          tar -xJf sf.tar.xz -C ~/sf --strip-components 1
+          echo "$HOME/sf/bin" >> $GITHUB_PATH
 
       - name: Autenticarse con Dev Hub
         run: echo ${{ secrets.SFDX_AUTH_URL }} > sfdx_auth.txt && sf org login sfdx-url -f sfdx_auth.txt -a devhub
