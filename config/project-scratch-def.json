@@ -1,13 +1,10 @@
 {
-  "orgName": "Demo company",
+  "orgName": "Plants4All CI",
   "edition": "Developer",
   "features": ["EnableSetPasswordInApi"],
   "settings": {
-    "lightningExperienceSettings": {
-      "enableS1DesktopEnabled": true
-    },
-    "mobileSettings": {
-      "enableS1EncryptedStoragePref2": false
+    "orgPreferenceSettings": {
+      "s1DesktopEnabled": true
     }
   }
 }
