@@ -1,79 +1,73 @@
 <template>
-    <template if:true={species}>
-        <article class="tile slds-card">
+  <template if:true={species}>
+    <article class="tile slds-card">
+      <!-- HEADER -->
+      <div class="slds-card__header slds-grid">
+        <header class="slds-media slds-media_center slds-has-flexi-truncate">
+          <div class="slds-media__figure">
+            <lightning-icon
+              icon-name="custom:custom5"
+              size="small"
+              alternative-text="Species"
+            >
+            </lightning-icon>
+          </div>
+          <div class="slds-media__body">
+            <h2 class="title slds-card__header-title">{species.Name}</h2>
+          </div>
+        </header>
+      </div>
 
-            <!-- HEADER -->
-            <div class="slds-card__header slds-grid">
-                <header class="slds-media slds-media_center slds-has-flexi-truncate">
-                    <div class="slds-media__figure">
-                        <lightning-icon
-                            icon-name="custom:custom5"
-                            size="small"
-                            alternative-text="Species">
-                        </lightning-icon>
-                    </div>
-                    <div class="slds-media__body">
-                        <h2 class="title slds-card__header-title">
-                            {species.Name}
-                        </h2>
-                    </div>
-                </header>
-            </div>
+      <!-- DESCRIPCIÓN -->
+      <p class="description slds-p-horizontal_small">
+        {species.Description__c}
+      </p>
 
-            <!-- DESCRIPCIÓN -->
-            <p class="description slds-p-horizontal_small">
-                {species.Description__c}
-            </p>
+      <!-- IMAGEN -->
+      <div class="image-container">
+        <template if:true={species.Image_URL__c}>
+          <img class="image" src={species.Image_URL__c} alt={species.Name} />
+        </template>
+      </div>
 
-            <!-- IMAGEN -->
-            <div class="image-container">
-                <template if:true={species.Image_URL__c}>
-                    <img
-                        class="image"
-                        src={species.Image_URL__c}
-                        alt={species.Name}
-                    />
-                </template>
-            </div>
+      <!-- LOCATION -->
+      <p class="location slds-p-horizontal_small">{species.Location__c}</p>
 
-            <!-- LOCATION -->
-            <p class="location slds-p-horizontal_small">
-                {species.Location__c}
-            </p>
+      <!-- 🔥 ACTIONS (ICONO + BOTÓN EN LA MISMA LÍNEA) -->
+      <div
+        class="actions slds-p-around_small slds-grid slds-grid_align-spread slds-align-center"
+      >
+        <!-- ICONO -->
+        <div>
+          <template if:true={isOutdoors}>
+            <lightning-icon
+              icon-name="custom:custom3"
+              size="small"
+              alternative-text="Outdoors"
+              title="Outdoors"
+            >
+            </lightning-icon>
+          </template>
 
-            <!-- 🔥 ACTIONS (ICONO + BOTÓN EN LA MISMA LÍNEA) -->
-            <div class="actions slds-p-around_small slds-grid slds-grid_align-spread slds-align-center">
+          <template if:true={isIndoors}>
+            <lightning-icon
+              icon-name="standard:home"
+              size="small"
+              alternative-text="Indoors"
+              title="Indoors"
+            >
+            </lightning-icon>
+          </template>
+        </div>
 
-                <!-- ICONO -->
-                <div>
-                    <template if:true={isOutdoors}>
-                        <lightning-icon
-                            icon-name="custom:custom3"
-                            size="small"
-                            alternative-text="Outdoors"
-                            title="Outdoors">
-                        </lightning-icon>
-                    </template>
-
-                    <template if:true={isIndoors}>
-                        <lightning-icon
-                            icon-name="standard:home"
-                            size="small"
-                            alternative-text="Indoors"
-                            title="Indoors">
-                        </lightning-icon>
-                    </template>
-                </div>
-
-                <!-- BOTÓN -->
-                <lightning-button
-                    label="View Details"
-                    variant="neutral"
-                    onclick={handleView}>
-                </lightning-button>
-
-            </div>
-
-        </article>
-    </template>
+        <!-- BOTÓN -->
+        <lightning-button
+          label="View Details"
+          variant="neutral"
+          onclick={handleView}
+        >
+        </lightning-button>
+      </div>
+    </article>
+  </template>
 </template>

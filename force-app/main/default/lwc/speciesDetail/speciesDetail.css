@@ -1,71 +1,70 @@
 :host {
-    display: block;
+  display: block;
 }
 
 /* CONTENEDOR PRINCIPAL */
 .container {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    width: 100%;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 /* COLUMNA IZQUIERDA */
 .left {
-    flex: 0 0 40%;
+  flex: 0 0 40%;
 }
 
 /* COLUMNA DERECHA */
 .right {
-    flex: 1;
-    font-size: 18px;
-    line-height: 1.5;
+  flex: 1;
+  font-size: 18px;
+  line-height: 1.5;
 }
 
 /* IMAGEN */
 .image-large {
-    width: 100%;
-    max-width: 100%;
-    height: 360px;
-    object-fit: cover;
-    border-radius: 16px;
+  width: 100%;
+  max-width: 100%;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 16px;
 }
 
 /* TABS */
 .slds-tabs_default__link {
-    font-size: 1.2rem;
-    font-weight: 700;
-    text-transform: uppercase;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 /* LABELS */
 .slds-form-element__label {
-    font-size: 1rem;
-    font-weight: 700;
-    text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 /* VALORES */
 .slds-form-element__control {
-    font-size: 1rem;
-    font-weight: 600;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 /* RESPONSIVE */
 @media screen and (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+  }
 
-    .container {
-        flex-direction: column;
-    }
+  .left,
+  .right {
+    flex: 1 1 100%;
+    width: 100%;
+  }
 
-    .left,
-    .right {
-        flex: 1 1 100%;
-        width: 100%;
-    }
-
-    .image-large {
-        height: auto;
-    }
+  .image-large {
+    height: auto;
+  }
 }
