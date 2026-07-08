@@ -14,7 +14,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Instalar Salesforce CLI
-        run: npm install --global @salesforce/cli
+        run: |
+          curl -sSL https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/install.sh | bash
 
       - name: Autenticarse con Dev Hub
         run: echo ${{ secrets.SFDX_AUTH_URL }} > sfdx_auth.txt && sf org login sfdx-url -f sfdx_auth.txt -a devhub
