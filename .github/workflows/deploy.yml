@@ -13,15 +13,22 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Instalar Salesforce CLI
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Instalar Salesforce CLI con npm
         run: |
-          curl -sSL https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf.tar.xz -o sf.tar.xz
-          mkdir -p ~/sf
-          tar -xJf sf.tar.xz -C ~/sf --strip-components 1
-          echo "$HOME/sf/bin" >> $GITHUB_PATH
+          npm install @salesforce/cli --location=global
+          npm_prefix=$(npm config get prefix)
+          echo "$npm_prefix/bin" >> $GITHUB_PATH
+
+      - name: Verificar instalación de sf
+        run: sf version
 
       - name: Autenticarse con Dev Hub
         run: echo ${{ secrets.SFDX_AUTH_URL }} > sfdx_auth.txt && sf org login sfdx-url -f sfdx_auth.txt -a devhub
 
-      - name: Deploy a la org
+      - name: Desplegar código a la org
         run: sf project deploy start --source-dir force-app --target-org devhub
