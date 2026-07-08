@@ -17,38 +17,26 @@ public with sharing class PlantWithProblemsHandler {
         return;
       }
 
-      // 3. Consulta en lote
+      // 3. Consulta en lote (solo campos necesarios)
       Map<Id, Plant__c> plantsMap = new Map<Id, Plant__c>(
         [
-          SELECT Id, Name, Last_Temperature_Alert__c
+          SELECT Id, Name
           FROM Plant__c
           WHERE Id IN :plantIds
         ]
       );
 
-      // 4. Procesar eventos
-      List<Plant__c> toUpdate = new List<Plant__c>();
+      // 4. Procesar eventos (solo logs, sin actualización de campo)
       for (Plant_With_Problems__e evt : events) {
         Plant__c plant = plantsMap.get(evt.Plant_Id__c);
         if (plant != null) {
-          plant.Last_Temperature_Alert__c = System.now();
-          toUpdate.add(plant);
-          System.debug('✅ Planta actualizada: ' + plant.Name);
+          System.debug('✅ Planta encontrada: ' + plant.Name);
         } else {
           System.debug('⚠️ Planta no encontrada: ' + evt.Plant_Id__c);
         }
       }
 
-      // 5. Update con validación CRUD
-      if (!toUpdate.isEmpty()) {
-        if (Schema.sObjectType.Plant__c.isUpdateable()) {
-          update toUpdate;
-        } else {
-          System.debug(
-            '⚠️ El usuario no tiene permisos para actualizar Plant__c'
-          );
-        }
-      }
+      // No hay actualizaciones pendientes, todo está bien
     } catch (Exception e) {
       System.debug('❌ Error procesando eventos: ' + e.getMessage());
       Database.rollback(sp);
