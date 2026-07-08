@@ -7,31 +7,53 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  validate-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      # --- 1. Descargar el código ---
       - name: Checkout código
-        uses: actions/checkout@v5 # ← Actualizado de v3 a v5
+        uses: actions/checkout@v5
 
+      # --- 2. Configurar Node.js (necesario para LWC y Prettier) ---
       - name: Instalar Node.js
-        uses: actions/setup-node@v5 # ← Actualizado de v4 a v5
+        uses: actions/setup-node@v5
         with:
           node-version: "20"
+          cache: "npm"
 
+      # --- 3. Instalar dependencias (LWC, Jest, Prettier) ---
+      - name: Instalar dependencias npm
+        run: npm install
+
+      # --- 4. Validar formato del código (Prettier) ---
+      - name: Validar formato con Prettier
+        run: npx prettier --check .
+
+      # --- 5. Ejecutar pruebas de LWC (Jest) ---
+      - name: Ejecutar pruebas LWC
+        run: npm run test:unit
+
+      # --- 6. Instalar Salesforce CLI (para Apex) ---
       - name: Instalar Salesforce CLI
         run: |
           npm install @salesforce/cli --location=global
           echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
-      - name: Verificar instalación
+      - name: Verificar instalación de Salesforce CLI
         run: sf --version
 
+      # --- 7. Autenticarse con Dev Hub ---
       - name: Autenticarse con Dev Hub
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
-          echo "$SFDX_AUTH_URL" > auth.txt
+          echo "$SFDX_AUTH_URL" | tr -d '\n\r' > auth.txt
           sf org login sfdx-url -f auth.txt -a devhub -d
 
-      - name: Deploy a la org
+      # --- 8. Ejecutar pruebas Apex (validación) ---
+      - name: Ejecutar pruebas Apex
+        run: sf apex run test --target-org devhub --synchronous --wait 10 --result-format human
+
+      # --- 9. Desplegar solo si todo lo anterior funcionó ---
+      - name: Desplegar a la org
         run: sf project deploy start --source-dir force-app --target-org devhub --wait 10
