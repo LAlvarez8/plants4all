@@ -11,83 +11,81 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>🌴 Tropical (Amazonas, sureste asiático)</fullName>
+                <fullName>Tropical (Amazonas, sureste asiático)</fullName>
                 <default>false</default>
-                <label>🌴 Tropical (Amazonas, sureste asiático)</label>
+                <label>Tropical (Amazonas, sureste asiático)</label>
             </value>
             <value>
                 <fullName
-        >🌾 Tropical de Sabana (África subsahariana, sur de India)</fullName>
+        >Tropical de Sabana (África subsahariana, sur de India)</fullName>
                 <default>false</default>
                 <label
-        >🌾 Tropical de Sabana (África subsahariana, sur de India)</label>
+        >Tropical de Sabana (África subsahariana, sur de India)</label>
             </value>
             <value>
                 <fullName
-        >🌿 Subtropical (Sureste de EE. UU., sur de Brasil, este de Asia)</fullName>
+        >Subtropical (Sureste de EE. UU., sur de Brasil, este de Asia)</fullName>
                 <default>false</default>
                 <label
-        >🌿 Subtropical (Sureste de EE. UU., sur de Brasil, este de Asia)</label>
+        >Subtropical (Sureste de EE. UU., sur de Brasil, este de Asia)</label>
             </value>
             <value>
                 <fullName
-        >☀️ Mediterráneo (Sur de Europa, California, Chile central)</fullName>
+        >Mediterráneo (Sur de Europa, California, Chile central)</fullName>
                 <default>false</default>
                 <label
-        >☀️ Mediterráneo (Sur de Europa, California, Chile central)</label>
+        >Mediterráneo (Sur de Europa, California, Chile central)</label>
             </value>
             <value>
                 <fullName
-        >🌲 Templado Oceánico (Inglaterra, noroeste de EE. UU., sur de Chile)</fullName>
+        >Templado Oceánico (Inglaterra, noroeste de EE. UU., sur de Chile)</fullName>
                 <default>false</default>
                 <label
-        >🌲 Templado Oceánico (Inglaterra, noroeste de EE. UU., sur de Chile)</label>
+        >Templado Oceánico (Inglaterra, noroeste de EE. UU., sur de Chile)</label>
             </value>
             <value>
                 <fullName
-        >🏔️ Continental Húmedo (Noreste de EE. UU., Europa del Este, norte de China)</fullName>
+        >Continental Húmedo (Noreste de EE. UU., Europa del Este, norte de China)</fullName>
                 <default>false</default>
                 <label
-        >🏔️ Continental Húmedo (Noreste de EE. UU., Europa del Este, norte de China)</label>
+        >Continental Húmedo (Noreste de EE. UU., Europa del Este, norte de China)</label>
             </value>
             <value>
-                <fullName>⛰️ Alta Montaña (Andes, Himalaya, Alpes)</fullName>
+                <fullName>Alta Montaña (Andes, Himalaya, Alpes)</fullName>
                 <default>false</default>
-                <label>⛰️ Alta Montaña (Andes, Himalaya, Alpes)</label>
+                <label>Alta Montaña (Andes, Himalaya, Alpes)</label>
+            </value>
+            <value>
+                <fullName>Árido/Desértico (Sáhara, Sonora, Atacama)</fullName>
+                <default>false</default>
+                <label>Árido/Desértico (Sáhara, Sonora, Atacama)</label>
             </value>
             <value>
                 <fullName
-        >🏜️ Árido/Desértico (Sáhara, Sonora, Atacama)</fullName>
-                <default>false</default>
-                <label>🏜️ Árido/Desértico (Sáhara, Sonora, Atacama)</label>
-            </value>
-            <value>
-                <fullName
-        >🌾 Semiárido/Estepa (Centro de España, Patagonia, Grandes Llanuras)</fullName>
+        >Semiárido/Estepa (Centro de España, Patagonia, Grandes Llanuras)</fullName>
                 <default>false</default>
                 <label
-        >🌾 Semiárido/Estepa (Centro de España, Patagonia, Grandes Llanuras)</label>
+        >Semiárido/Estepa (Centro de España, Patagonia, Grandes Llanuras)</label>
             </value>
             <value>
                 <fullName
-        >❄️ Continental Frío/Subártico (Siberia, norte de Canadá, Escandinavia)</fullName>
+        >Continental Frío/Subártico (Siberia, norte de Canadá, Escandinavia)</fullName>
                 <default>false</default>
                 <label
-        >❄️ Continental Frío/Subártico (Siberia, norte de Canadá, Escandinavia)</label>
+        >Continental Frío/Subártico (Siberia, norte de Canadá, Escandinavia)</label>
             </value>
             <value>
                 <fullName
-        >🌴 Húmedo Insular (Hawaii, Islas Canarias, Madeira)</fullName>
+        >Húmedo Insular (Hawaii, Islas Canarias, Madeira)</fullName>
                 <default>false</default>
-                <label
-        >🌴 Húmedo Insular (Hawaii, Islas Canarias, Madeira)</label>
+                <label>Húmedo Insular (Hawaii, Islas Canarias, Madeira)</label>
             </value>
             <value>
                 <fullName
-        >🌲 Transición (Sur de Brasil, Uruguay, este de Paraguay)</fullName>
+        >Transición (Sur de Brasil, Uruguay, este de Paraguay)</fullName>
                 <default>false</default>
                 <label
-        >🌲 Transición (Sur de Brasil, Uruguay, este de Paraguay)</label>
+        >Transición (Sur de Brasil, Uruguay, este de Paraguay)</label>
             </value>
         </valueSetDefinition>
     </valueSet>
