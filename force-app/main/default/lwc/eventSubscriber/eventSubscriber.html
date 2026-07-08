@@ -1,0 +1,12 @@
+<template>
+  <lightning-button label="Suscribirse" onclick={subscribe}></lightning-button>
+  <lightning-button
+    label="Desuscribirse"
+    onclick={unsubscribe}
+  ></lightning-button>
+  <div>
+    <template for:each={messages} for:item="msg">
+      <p key={msg}>{msg}</p>
+    </template>
+  </div>
+</template>
