@@ -1,9 +1,17 @@
 @isTest
 private with sharing class PlantTriggerTest {
+  private static String getLocationesValue() {
+    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
+    List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
+    if (!picklistEntries.isEmpty()) {
+      return picklistEntries[0].getValue();
+    }
+    return null;
+  }
+
   @TestSetup
   static void createData() {
-    // Valor fijo del picklist (cualquiera de los 12 valores funciona)
-    String locationesValue = '🌴 Tropical (Amazonas, sureste asiático)';
+    String locationesValue = getLocationesValue();
 
     Species__c aloeVera = new Species__c(
       Name = 'Aloe Vera',
@@ -12,11 +20,10 @@ private with sharing class PlantTriggerTest {
       Location__c = 'Indoors',
       Locationes__c = locationesValue
     );
-
     insert aloeVera;
   }
 
-  @isTest
+  @IsTest
   static void updatePlantNextWateringDateCalculatedCorrectly() {
     Species__c specie = [SELECT Id FROM Species__c LIMIT 1];
 
@@ -39,7 +46,7 @@ private with sharing class PlantTriggerTest {
     );
   }
 
-  @isTest
+  @IsTest
   static void updatePlantNextFertilizationDateCalculatedCorrectly() {
     Species__c specie = [SELECT Id FROM Species__c LIMIT 1];
 
@@ -62,7 +69,7 @@ private with sharing class PlantTriggerTest {
     );
   }
 
-  @isTest
+  @IsTest
   static void updatePlantRecalculatesDatesCorrectly() {
     Species__c specie = [SELECT Id FROM Species__c LIMIT 1];
 
