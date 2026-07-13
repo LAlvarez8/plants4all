@@ -2,12 +2,20 @@
 private with sharing class PlantServiceTest {
   @TestSetup
   static void createData() {
+    // Obtener valor dinámico del picklist Locationes__c
+    String locationesValue = '';
+    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
+    List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
+    if (!picklistEntries.isEmpty()) {
+      locationesValue = picklistEntries[0].getValue();
+    }
+
     Species__c aloeVera = new Species__c(
       Name = 'Aloe Vera',
       Whatering__c = 'Low (1 vez por semana)',
       Fertilization__c = 'Low (cada mes)',
       Location__c = 'Indoors',
-      Locationes__c = '🌴 Tropical (Amazonas, sureste asiático)'
+      Locationes__c = locationesValue
     );
     insert aloeVera;
   }
@@ -20,14 +28,12 @@ private with sharing class PlantServiceTest {
       Last_Watered__c = System.today(),
       Last_Fertilization__c = System.today()
     );
-
     PlantService plantService = new PlantService();
     plantService.calculateNextWateringDate(new List<Plant__c>{ plant });
-
     System.assertEquals(
       System.today().addDays(7),
       plant.Next_Water__c,
-      'Next_Water__c should be 7 days after Last_Watered__c for Low frequency'
+      'Next_Water__c should be 7 days after Last_Watered__c'
     );
   }
 
@@ -39,14 +45,12 @@ private with sharing class PlantServiceTest {
       Last_Watered__c = System.today(),
       Last_Fertilization__c = System.today()
     );
-
     PlantService plantService = new PlantService();
     plantService.calculateNextFertilizationDate(new List<Plant__c>{ plant });
-
     System.assertEquals(
       System.today().addDays(30),
       plant.Next_Fertilization__c,
-      'Next_Fertilization__c should be 30 days after Last_Fertilization__c for Low frequency'
+      'Next_Fertilization__c should be 30 days after Last_Fertilization__c'
     );
   }
 }
