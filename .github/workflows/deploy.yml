@@ -44,19 +44,17 @@ jobs:
       - name: Verificar Salesforce CLI
         run: sf version
 
-      # --- AUTENTICACIÓN CORREGIDA ---
+      # --- AUTENTICACIÓN CON SFDX (ESTABLE Y SIN BUG) ---
       - name: Autenticar org
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
-          # Limpiar la URL de saltos de línea y caracteres no imprimibles
-          CLEAN_URL=$(echo "$SFDX_AUTH_URL" | tr -d '\n\r' | tr -cd '[:print:]')
-          # Guardar en archivo
-          echo "$CLEAN_URL" > auth.txt
-          # Mostrar longitud y primeros caracteres para depuración
-          echo "🔍 Longitud del archivo: $(wc -c < auth.txt)"
-          echo "🔍 Primeros 20 caracteres: $(head -c 20 auth.txt)"
-          # Usar sfdx (el comando antiguo) porque es más estable
+          # Limpiar URL: eliminar saltos de línea, retornos de carro y caracteres no imprimibles
+          echo "$SFDX_AUTH_URL" | tr -d '\n\r' | tr -cd '[:print:]' > auth.txt
+          # Mostrar depuración (sin exponer el secreto completo)
+          echo "🔍 Longitud: $(wc -c < auth.txt)"
+          echo "🔍 Inicio: $(head -c 20 auth.txt)"
+          # Autenticar con sfdx (evita el bug de regex)
           sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
 
       - name: Ejecutar pruebas Apex
