@@ -9,6 +9,7 @@ on:
 jobs:
   validate-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout código
         uses: actions/checkout@v5
@@ -28,24 +29,30 @@ jobs:
       - name: Ejecutar pruebas LWC
         run: npm run test:unit
 
-      # --- INSTALAR SALESFORCE CLI CON ACCIÓN OFICIAL ---
       - name: Instalar Salesforce CLI
-        uses: salesforce/cli@v2
-        with:
-          version: "latest"
+        run: |
+          npm install @salesforce/cli@2.139.6 --location=global
+          echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
       - name: Verificar instalación
         run: sf --version
 
-      # --- AUTENTICACIÓN USANDO EL SECRETO ---
+      # --- AUTENTICACIÓN USANDO LA URL DIRECTAMENTE ---
       - name: Autenticarse con Dev Hub
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
-          # Creamos el archivo de autenticación con la URL limpia
-          echo "$SFDX_AUTH_URL" > auth.txt
-          # Usamos sfdx (incluido en la acción) para autenticar
-          sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
+          # Mostrar información de depuración (primeros 20 caracteres y longitud)
+          echo "Longitud de la URL: ${#SFDX_AUTH_URL}"
+          echo "Primeros 20 caracteres: ${SFDX_AUTH_URL:0:20}"
+
+          # Intentar autenticar con sf (nuevo CLI) usando la URL directa
+          if sf org login sfdx-url --sfdx-url "$SFDX_AUTH_URL" -a devhub -d --json; then
+            echo "✅ Autenticación con sf exitosa"
+          else
+            echo "⚠️ Falló autenticación con sf, intentando con sfdx..."
+            sfdx force:auth:sfdxurl:store --sfdxurl "$SFDX_AUTH_URL" -a devhub -d
+          fi
 
       - name: Ejecutar pruebas Apex
         run: sf apex run test --target-org devhub --synchronous --wait 10 --result-format human
