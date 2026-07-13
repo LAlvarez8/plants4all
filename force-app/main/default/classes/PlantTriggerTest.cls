@@ -9,6 +9,7 @@ private with sharing class PlantTriggerTest {
     if (!picklistEntries.isEmpty()) {
       locationesValue = picklistEntries[0].getValue();
     }
+    System.debug('🔍 LocationesValue en TestSetup: ' + locationesValue);
 
     Species__c aloeVera = new Species__c(
       Name = 'Aloe Vera',
