@@ -33,17 +33,27 @@ jobs:
       - name: Ejecutar pruebas LWC
         run: npm run test:unit
 
-      # --- 6. Instalar y autenticar Salesforce CLI (Acción dedicada) ---
-      - name: Setup Salesforce CLI
-        uses: rdbumstead/setup-salesforce-action@v2
-        with:
-          auth_method: "sfdx-url"
-          sfdx_auth_url: ${{ secrets.SFDX_AUTH_URL }}
+      # --- 6. Instalar Salesforce CLI (de forma estable) ---
+      - name: Instalar Salesforce CLI
+        run: |
+          npm install @salesforce/cli --location=global
+          echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
-      # --- 7. Ejecutar pruebas Apex (validación) ---
+      - name: Verificar instalación de Salesforce CLI
+        run: sf --version
+
+      # --- 7. Autenticarse con Dev Hub ---
+      - name: Autenticarse con Dev Hub
+        env:
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+        run: |
+          echo "$SFDX_AUTH_URL" > auth.txt
+          sf org login sfdx-url -f auth.txt -a devhub -d
+
+      # --- 8. Ejecutar pruebas Apex (validación) ---
       - name: Ejecutar pruebas Apex
         run: sf apex run test --target-org devhub --synchronous --wait 10 --result-format human
 
-      # --- 8. Desplegar solo si todo lo anterior funcionó ---
+      # --- 9. Desplegar solo si todo lo anterior funcionó ---
       - name: Desplegar a la org
         run: sf project deploy start --source-dir force-app --target-org devhub --wait 10
