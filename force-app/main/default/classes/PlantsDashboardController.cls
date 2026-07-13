@@ -1,136 +1,115 @@
-public with sharing class PlantsDashboardController {
-  public class ChartRow {
-    @AuraEnabled
-    public String label { get; set; }
-    @AuraEnabled
-    public Integer value { get; set; }
-
-    public ChartRow(String label, Integer value) {
-      this.label = String.isBlank(label) ? 'Sin dato' : label;
-      this.value = value == null ? 0 : value;
+@IsTest
+private class PlantsDashboardControllerTest {
+  @TestSetup
+  static void createData() {
+    // Obtener valor del picklist o usar null si no hay valores
+    String locationesValue = null;
+    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
+    List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
+    if (!picklistEntries.isEmpty()) {
+      locationesValue = picklistEntries[0].getValue();
     }
+    System.debug('🔍 LocationesValue en TestSetup: ' + locationesValue);
+
+    Species__c aloe = new Species__c(
+      Name = 'Aloe Vera',
+      Location__c = 'Indoors',
+      Locationes__c = locationesValue,
+      Whatering__c = 'Low (1 vez por semana)',
+      Fertilization__c = 'Low (cada mes)'
+    );
+    Species__c perejil = new Species__c(
+      Name = 'Perejil',
+      Location__c = 'Outdoors',
+      Locationes__c = locationesValue,
+      Whatering__c = 'High (diario)',
+      Fertilization__c = 'Medium (cada 2 semanas)'
+    );
+    insert new List<Species__c>{ aloe, perejil };
+
+    insert new List<Plant__c>{
+      new Plant__c(
+        Species__c = aloe.Id,
+        Last_Watered__c = Date.today().addDays(-10),
+        Last_Fertilization__c = Date.today().addDays(-40),
+        Next_Water__c = Date.today().addDays(-1),
+        Next_Fertilization__c = Date.today().addDays(-1)
+      ),
+      new Plant__c(
+        Species__c = perejil.Id,
+        Last_Watered__c = Date.today(),
+        Last_Fertilization__c = Date.today(),
+        Next_Water__c = Date.today().addDays(1),
+        Next_Fertilization__c = Date.today().addDays(1)
+      )
+    };
   }
 
-  public class DashboardData {
-    @AuraEnabled
-    public List<ChartRow> plantsBySpecies { get; set; }
-    @AuraEnabled
-    public List<ChartRow> pendingFertilization { get; set; }
-    @AuraEnabled
-    public List<ChartRow> plantsByOwner { get; set; }
-    @AuraEnabled
-    public List<ChartRow> pendingWatering { get; set; }
-    @AuraEnabled
-    public Datetime generatedAt { get; set; }
+  @IsTest
+  static void getDashboardDataReturnsChartRows() {
+    Test.startTest();
+    PlantsDashboardController.DashboardData data = PlantsDashboardController.getDashboardData();
+    Test.stopTest();
+
+    System.assertEquals(
+      2,
+      data.plantsBySpecies.size(),
+      'Debe haber 2 especies con plantas'
+    );
+    System.assertEquals(
+      1,
+      data.pendingWatering.size(),
+      'Debe haber 1 especie con riego pendiente'
+    );
+    System.assertEquals(
+      1,
+      data.pendingFertilization.size(),
+      'Debe haber 1 especie con fertilización pendiente'
+    );
+    System.assertEquals(
+      1,
+      data.plantsByOwner.size(),
+      'Debe haber 1 propietario con plantas'
+    );
+    System.assertNotEquals(
+      null,
+      data.generatedAt,
+      'La fecha de generación no debe ser nula'
+    );
   }
 
-  @AuraEnabled(cacheable=true)
-  public static DashboardData getDashboardData() {
-    if (!Schema.sObjectType.Plant__c.isAccessible()) {
-      throw new AuraHandledException(
-        'No tienes permisos para leer registros de Plant__c'
-      );
-    }
+  @IsTest
+  static void getDashboardDataWhenNoPlants() {
+    delete [SELECT Id FROM Plant__c];
 
-    DashboardData data = new DashboardData();
-    data.plantsBySpecies = getPlantsBySpecies();
-    data.pendingFertilization = getPendingFertilization();
-    data.plantsByOwner = getPlantsByOwner();
-    data.pendingWatering = getPendingWatering();
-    data.generatedAt = System.now();
-    return data;
-  }
+    Test.startTest();
+    PlantsDashboardController.DashboardData data = PlantsDashboardController.getDashboardData();
+    Test.stopTest();
 
-  private static List<ChartRow> getPlantsBySpecies() {
-    if (!Schema.sObjectType.Species__c.fields.Name.isAccessible()) {
-      return new List<ChartRow>();
-    }
-
-    List<ChartRow> rows = new List<ChartRow>();
-    for (AggregateResult result : [
-      SELECT Species__r.Name speciesName, COUNT(Id) total
-      FROM Plant__c
-      WHERE Species__c != NULL
-      GROUP BY Species__r.Name
-      ORDER BY Species__r.Name
-    ]) {
-      rows.add(
-        new ChartRow(
-          (String) result.get('speciesName'),
-          (Integer) result.get('total')
-        )
-      );
-    }
-    return rows;
-  }
-
-  private static List<ChartRow> getPendingFertilization() {
-    if (!Schema.sObjectType.Species__c.fields.Name.isAccessible()) {
-      return new List<ChartRow>();
-    }
-
-    List<ChartRow> rows = new List<ChartRow>();
-    Date today = Date.today();
-    for (AggregateResult result : [
-      SELECT Species__r.Name speciesName, COUNT(Id) total
-      FROM Plant__c
-      WHERE Species__c != NULL AND Next_Fertilization__c <= :today
-      GROUP BY Species__r.Name
-      ORDER BY Species__r.Name
-    ]) {
-      rows.add(
-        new ChartRow(
-          (String) result.get('speciesName'),
-          (Integer) result.get('total')
-        )
-      );
-    }
-    return rows;
-  }
-
-  private static List<ChartRow> getPlantsByOwner() {
-    if (!Schema.sObjectType.Plant__c.fields.OwnerId.isAccessible()) {
-      return new List<ChartRow>();
-    }
-
-    List<ChartRow> rows = new List<ChartRow>();
-    for (AggregateResult result : [
-      SELECT Owner.Name ownerName, COUNT(Id) total
-      FROM Plant__c
-      GROUP BY Owner.Name
-      ORDER BY Owner.Name
-    ]) {
-      rows.add(
-        new ChartRow(
-          (String) result.get('ownerName'),
-          (Integer) result.get('total')
-        )
-      );
-    }
-    return rows;
-  }
-
-  private static List<ChartRow> getPendingWatering() {
-    if (!Schema.sObjectType.Species__c.fields.Name.isAccessible()) {
-      return new List<ChartRow>();
-    }
-
-    List<ChartRow> rows = new List<ChartRow>();
-    Date today = Date.today();
-    for (AggregateResult result : [
-      SELECT Species__r.Name speciesName, COUNT(Id) total
-      FROM Plant__c
-      WHERE Species__c != NULL AND Next_Water__c <= :today
-      GROUP BY Species__r.Name
-      ORDER BY Species__r.Name
-    ]) {
-      rows.add(
-        new ChartRow(
-          (String) result.get('speciesName'),
-          (Integer) result.get('total')
-        )
-      );
-    }
-    return rows;
+    System.assertEquals(
+      0,
+      data.plantsBySpecies.size(),
+      'No debe haber especies con plantas'
+    );
+    System.assertEquals(
+      0,
+      data.pendingWatering.size(),
+      'No debe haber plantas con riego pendiente'
+    );
+    System.assertEquals(
+      0,
+      data.pendingFertilization.size(),
+      'No debe haber plantas con fertilización pendiente'
+    );
+    System.assertEquals(
+      0,
+      data.plantsByOwner.size(),
+      'No debe haber propietarios con plantas'
+    );
+    System.assertNotEquals(
+      null,
+      data.generatedAt,
+      'La fecha de generación no debe ser nula'
+    );
   }
 }
