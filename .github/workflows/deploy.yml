@@ -9,12 +9,11 @@ on:
 jobs:
   validate-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout código
         uses: actions/checkout@v5
 
-      - name: Instalar Node.js (LTS estable)
+      - name: Instalar Node.js
         uses: actions/setup-node@v5
         with:
           node-version: "18"
@@ -29,21 +28,23 @@ jobs:
       - name: Ejecutar pruebas LWC
         run: npm run test:unit
 
+      # --- INSTALAR SALESFORCE CLI CON ACCIÓN OFICIAL ---
       - name: Instalar Salesforce CLI
-        run: |
-          npm install @salesforce/cli@2.139.6 --location=global
-          echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
+        uses: salesforce/cli@v2
+        with:
+          version: "latest"
 
       - name: Verificar instalación
         run: sf --version
 
-      # --- AUTENTICACIÓN CON SFDX (EVITA EL BUG DE REGEX) ---
+      # --- AUTENTICACIÓN USANDO EL SECRETO ---
       - name: Autenticarse con Dev Hub
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
+          # Creamos el archivo de autenticación con la URL limpia
           echo "$SFDX_AUTH_URL" > auth.txt
-          # Usar el comando antiguo para evitar el bug de regex
+          # Usamos sfdx (incluido en la acción) para autenticar
           sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
 
       - name: Ejecutar pruebas Apex
