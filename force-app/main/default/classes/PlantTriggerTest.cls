@@ -1,17 +1,14 @@
 @isTest
 private with sharing class PlantTriggerTest {
-  private static String getLocationesValue() {
+  @TestSetup
+  static void createData() {
+    // Obtener valor dinámico del picklist Locationes__c
+    String locationesValue = '';
     Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
     List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
     if (!picklistEntries.isEmpty()) {
-      return picklistEntries[0].getValue();
+      locationesValue = picklistEntries[0].getValue();
     }
-    return null;
-  }
-
-  @TestSetup
-  static void createData() {
-    String locationesValue = getLocationesValue();
 
     Species__c aloeVera = new Species__c(
       Name = 'Aloe Vera',
@@ -23,22 +20,18 @@ private with sharing class PlantTriggerTest {
     insert aloeVera;
   }
 
-  @IsTest
+  @isTest
   static void updatePlantNextWateringDateCalculatedCorrectly() {
     Species__c specie = [SELECT Id FROM Species__c LIMIT 1];
-
     Plant__c plant = new Plant__c(
       Species__c = specie.Id,
       Last_Watered__c = System.today(),
       Last_Fertilization__c = System.today()
     );
-
     Test.startTest();
     insert plant;
     Test.stopTest();
-
     plant = [SELECT Next_Water__c FROM Plant__c WHERE Id = :plant.Id];
-
     System.assertEquals(
       System.today().addDays(7),
       plant.Next_Water__c,
@@ -46,22 +39,18 @@ private with sharing class PlantTriggerTest {
     );
   }
 
-  @IsTest
+  @isTest
   static void updatePlantNextFertilizationDateCalculatedCorrectly() {
     Species__c specie = [SELECT Id FROM Species__c LIMIT 1];
-
     Plant__c plant = new Plant__c(
       Species__c = specie.Id,
       Last_Watered__c = System.today(),
       Last_Fertilization__c = System.today()
     );
-
     Test.startTest();
     insert plant;
     Test.stopTest();
-
     plant = [SELECT Next_Fertilization__c FROM Plant__c WHERE Id = :plant.Id];
-
     System.assertEquals(
       System.today().addDays(30),
       plant.Next_Fertilization__c,
@@ -69,37 +58,31 @@ private with sharing class PlantTriggerTest {
     );
   }
 
-  @IsTest
+  @isTest
   static void updatePlantRecalculatesDatesCorrectly() {
     Species__c specie = [SELECT Id FROM Species__c LIMIT 1];
-
     Plant__c plant = new Plant__c(
       Species__c = specie.Id,
       Last_Watered__c = System.today(),
       Last_Fertilization__c = System.today()
     );
     insert plant;
-
     Date newDate = System.today().addDays(1);
     plant.Last_Watered__c = newDate;
     plant.Last_Fertilization__c = newDate;
-
     Test.startTest();
     update plant;
     Test.stopTest();
-
     plant = [
       SELECT Next_Water__c, Next_Fertilization__c
       FROM Plant__c
       WHERE Id = :plant.Id
     ];
-
     System.assertEquals(
       newDate.addDays(7),
       plant.Next_Water__c,
       'Next water date should recalculate after update'
     );
-
     System.assertEquals(
       newDate.addDays(30),
       plant.Next_Fertilization__c,

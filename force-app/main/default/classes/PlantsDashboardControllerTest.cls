@@ -2,8 +2,13 @@
 private class PlantsDashboardControllerTest {
   @TestSetup
   static void createData() {
-    // Obtener un valor válido del picklist y limpiarlo de emojis/caracteres especiales
-    String locationesValue = getCleanPicklistValue();
+    // Obtener valor dinámico del picklist Locationes__c
+    String locationesValue = '';
+    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
+    List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
+    if (!picklistEntries.isEmpty()) {
+      locationesValue = picklistEntries[0].getValue();
+    }
 
     Species__c aloe = new Species__c(
       Name = 'Aloe Vera',
@@ -37,30 +42,6 @@ private class PlantsDashboardControllerTest {
         Next_Fertilization__c = Date.today().addDays(1)
       )
     };
-  }
-
-  // Helper para obtener un valor del picklist sin emojis/caracteres especiales
-  private static String getCleanPicklistValue() {
-    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
-    List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
-
-    if (picklistEntries.isEmpty()) {
-      return 'Tropical'; // Fallback si no hay valores
-    }
-
-    // Obtener el API Name (versión sin emojis) usando getValue()
-    String rawValue = picklistEntries[0].getValue();
-
-    // Limpiar caracteres no ASCII (emojis, símbolos raros)
-    // Esto elimina todo lo que no sea letras, números, espacios, paréntesis, guiones y comas
-    String cleanValue = rawValue.replaceAll('[^\\w\\s()\\-,]', '');
-
-    // Si después de limpiar queda vacío, usar un fallback
-    if (String.isBlank(cleanValue)) {
-      return 'Tropical';
-    }
-
-    return cleanValue;
   }
 
   @IsTest

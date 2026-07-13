@@ -36,8 +36,10 @@ jobs:
       # --- 6. Instalar Salesforce CLI (para Apex) ---
       - name: Instalar Salesforce CLI
         run: |
-          npm install @salesforce/cli --location=global
-          echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
+          curl -sSL https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf.tar.xz -o sf.tar.xz
+          mkdir -p ~/sf
+          tar -xJf sf.tar.xz -C ~/sf --strip-components 1
+          echo "$HOME/sf/bin" >> $GITHUB_PATH
 
       - name: Verificar instalación de Salesforce CLI
         run: sf --version
