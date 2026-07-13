@@ -17,13 +17,18 @@ jobs:
       - name: Instalar Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: "18"
           cache: npm
 
-      - name: Instalar dependencias npm
+      - name: Verificar Node
+        run: |
+          node --version
+          npm --version
+
+      - name: Instalar dependencias
         run: npm ci
 
-      - name: Validar formato con Prettier
+      - name: Validar formato
         run: npx prettier --check .
 
       - name: Ejecutar pruebas LWC
@@ -31,10 +36,15 @@ jobs:
 
       - name: Instalar Salesforce CLI
         run: |
-          npm install -g @salesforce/cli
-          sf --version
+          wget https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-linux-x64.tar.xz
+          mkdir sf
+          tar xJf sf-linux-x64.tar.xz -C sf --strip-components 1
+          echo "$PWD/sf/bin" >> $GITHUB_PATH
 
-      - name: Autenticarse con la org
+      - name: Verificar Salesforce CLI
+        run: sf version
+
+      - name: Autenticar org
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
