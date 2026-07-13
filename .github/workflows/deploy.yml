@@ -20,11 +20,6 @@ jobs:
           node-version: "18"
           cache: npm
 
-      - name: Verificar Node
-        run: |
-          node --version
-          npm --version
-
       - name: Instalar dependencias
         run: npm ci
 
@@ -44,29 +39,25 @@ jobs:
       - name: Verificar Salesforce CLI
         run: sf version
 
-      # --- AUTENTICACIÓN CON SFDX (ESTABLE Y SIN BUG) ---
       - name: Autenticar org
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
-          # Limpiar URL: eliminar saltos de línea, retornos de carro y caracteres no imprimibles
           echo "$SFDX_AUTH_URL" | tr -d '\n\r' | tr -cd '[:print:]' > auth.txt
-          # Mostrar depuración (sin exponer el secreto completo)
-          echo "🔍 Longitud: $(wc -c < auth.txt)"
-          echo "🔍 Inicio: $(head -c 20 auth.txt)"
-          # Autenticar con sfdx (evita el bug de regex)
           sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
 
+      # 🔥 PRIMERO DESPLEGAR EL CÓDIGO (incluye los tests corregidos)
+      - name: Desplegar código
+        run: |
+          sf project deploy start \
+            --source-dir force-app \
+            --target-org devhub \
+            --wait 20
+
+      # 🔥 LUEGO EJECUTAR LAS PRUEBAS (con el código ya actualizado)
       - name: Ejecutar pruebas Apex
         run: |
           sf apex run test \
             --target-org devhub \
             --wait 20 \
             --result-format human
-
-      - name: Deploy
-        run: |
-          sf project deploy start \
-            --source-dir force-app \
-            --target-org devhub \
-            --wait 20
