@@ -30,32 +30,26 @@ jobs:
         run: npm run test:unit
 
       # --- INSTALAR SALESFORCE CLI CON ACCIÓN OFICIAL ---
-      - name: Instalar Salesforce CLI (acción oficial)
-        uses: salesforce/cli@v2
+      - name: Instalar Salesforce CLI
+        uses: sfdx-cli/setup-sfdx-cli@v1
         with:
           version: "latest"
 
       - name: Verificar instalación
         run: sf --version
 
-      # --- AUTENTICACIÓN CON ARCHIVO LIMPIO ---
+      # --- AUTENTICACIÓN CON SFDX (COMANDO ESTABLE) ---
       - name: Autenticarse con Dev Hub
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
-          # Limpiar la URL: eliminar saltos de línea, retornos de carro y caracteres no imprimibles
+          # Limpiar la URL y guardarla en un archivo
           echo "$SFDX_AUTH_URL" | tr -d '\n\r' | tr -cd '[:print:]' > auth.txt
           # Mostrar longitud y primeros caracteres para depuración
           echo "🔍 Longitud del archivo: $(wc -c < auth.txt)"
           echo "🔍 Primeros 20 caracteres: $(head -c 20 auth.txt)"
-          echo "🔍 Últimos 10 caracteres: $(tail -c 10 auth.txt)"
-          # Intentar autenticar con sf (nuevo CLI)
-          if sf org login sfdx-url -f auth.txt -a devhub -d --json; then
-            echo "✅ Autenticación con sf exitosa"
-          else
-            echo "⚠️ Falló autenticación con sf, intentando con sfdx..."
-            sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
-          fi
+          # Autenticar con sfdx (estable)
+          sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
 
       - name: Ejecutar pruebas Apex
         run: sf apex run test --target-org devhub --synchronous --wait 10 --result-format human
