@@ -1,31 +1,60 @@
-@IsTest
-private class SpeciesServiceTest {
-  @IsTest
-  static void getFilteredSpeciesReturnsMatchingRecords() {
-    String locationes = Species__c.Locationes__c
-        .getDescribe()
-        .getPicklistValues()[0]
-      .getValue();
+@isTest
+private with sharing class PlantServiceTest {
+  @TestSetup
+  static void createData() {
+    // Obtener valor dinámico del picklist Locationes__c
+    String locationesValue = '';
+    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
+    List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
+    if (!picklistEntries.isEmpty()) {
+      locationesValue = picklistEntries[0].getValue();
+    }
 
-    insert new Species__c(
+    Species__c aloeVera = new Species__c(
       Name = 'Aloe Vera',
-      Description__c = 'Planta de prueba',
-      Image_URL__c = 'https://example.com/aloe.jpg',
-      Location__c = 'Indoors',
-      Locationes__c = locationes,
       Whatering__c = 'Low (1 vez por semana)',
       Fertilization__c = 'Low (cada mes)',
-      Ideal_Max_Temperature__c = 25,
-      Ideal_Min_Temperature__c = 12
+      Location__c = 'Indoors',
+      Locationes__c = locationesValue
+    );
+    insert aloeVera;
+  }
+
+  @isTest
+  static void testCalculateNextWateringDate() {
+    Species__c specie = [SELECT Id, Whatering__c FROM Species__c LIMIT 1];
+    Plant__c plant = new Plant__c(
+      Species__c = specie.Id,
+      Last_Watered__c = System.today(),
+      Last_Fertilization__c = System.today()
     );
 
-    Test.startTest();
-    List<Species__c> species = SpeciesService.getFilteredSpecies('Aloe');
-    Test.stopTest();
+    PlantService plantService = new PlantService();
+    plantService.calculateNextWateringDate(new List<Plant__c>{ plant });
 
-    System.assertEquals(1, species.size());
-    System.assertEquals('Aloe Vera', species[0].Name);
-    System.assertEquals(25, species[0].Ideal_Max_Temperature__c);
-    System.assertEquals(12, species[0].Ideal_Min_Temperature__c);
+    System.assertEquals(
+      System.today().addDays(7),
+      plant.Next_Water__c,
+      'Next_Water__c should be 7 days after Last_Watered__c'
+    );
+  }
+
+  @isTest
+  static void testCalculateNextFertilizationDate() {
+    Species__c specie = [SELECT Id, Fertilization__c FROM Species__c LIMIT 1];
+    Plant__c plant = new Plant__c(
+      Species__c = specie.Id,
+      Last_Watered__c = System.today(),
+      Last_Fertilization__c = System.today()
+    );
+
+    PlantService plantService = new PlantService();
+    plantService.calculateNextFertilizationDate(new List<Plant__c>{ plant });
+
+    System.assertEquals(
+      System.today().addDays(30),
+      plant.Next_Fertilization__c,
+      'Next_Fertilization__c should be 30 days after Last_Fertilization__c'
+    );
   }
 }

@@ -17,11 +17,11 @@ jobs:
       - name: Instalar Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: 20
+          cache: npm
 
       - name: Instalar dependencias npm
-        run: npm install
+        run: npm ci
 
       - name: Validar formato con Prettier
         run: npx prettier --check .
@@ -29,28 +29,31 @@ jobs:
       - name: Ejecutar pruebas LWC
         run: npm run test:unit
 
-      # --- INSTALAR SALESFORCE CLI CON ACCIÓN OFICIAL ---
       - name: Instalar Salesforce CLI
-        run: npm install -g @Salesforce/cli
+        run: |
+          npm install -g @salesforce/cli
+          sf --version
 
-      - name: Verificar instalación
-        run: sf --version
-
-      # --- AUTENTICACIÓN CON SFDX (COMANDO ESTABLE) ---
-      - name: Autenticarse con Dev Hub
+      - name: Autenticarse con la org
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
-          # Limpiar la URL y guardarla en un archivo
-          echo "$SFDX_AUTH_URL" | tr -d '\n\r' | tr -cd '[:print:]' > auth.txt
-          # Mostrar longitud y primeros caracteres para depuración
-          echo "🔍 Longitud del archivo: $(wc -c < auth.txt)"
-          echo "🔍 Primeros 20 caracteres: $(head -c 20 auth.txt)"
-          # Autenticar con sfdx (estable)
-          sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
+          echo "$SFDX_AUTH_URL" > auth.txt
+          sf org login sfdx-url \
+            --sfdx-url-file auth.txt \
+            --alias devhub \
+            --set-default
 
       - name: Ejecutar pruebas Apex
-        run: sf apex run test --target-org devhub --synchronous --wait 10 --result-format human
+        run: |
+          sf apex run test \
+            --target-org devhub \
+            --wait 20 \
+            --result-format human
 
-      - name: Desplegar a la org
-        run: sf project deploy start --source-dir force-app --target-org devhub --wait 10
+      - name: Deploy
+        run: |
+          sf project deploy start \
+            --source-dir force-app \
+            --target-org devhub \
+            --wait 20
