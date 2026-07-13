@@ -9,47 +9,46 @@ on:
 jobs:
   validate-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout código
         uses: actions/checkout@v5
 
-      - name: Instalar Node.js (LTS estable)
+      - name: Instalar Node.js
         uses: actions/setup-node@v5
         with:
           node-version: "18"
           cache: "npm"
 
-      - name: Instalar dependencias npm
+      - name: Instalar dependencias
         run: npm install
 
-      - name: Validar formato con Prettier
+      - name: Validar formato Prettier
         run: npx prettier --check .
 
       - name: Ejecutar pruebas LWC
         run: npm run test:unit
 
-      # --- INSTALAR SALESFORCE CLI DESDE BINARIO OFICIAL ---
       - name: Instalar Salesforce CLI
-        uses: svierk/sfdx-cli-setup@main
-        with:
-          version: "latest"
+        run: |
+          npm install @salesforce/cli@2.139.6 --location=global
+          echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
 
       - name: Verificar instalación
         run: sf --version
 
-      # --- AUTENTICACIÓN ---
       - name: Autenticarse con Dev Hub
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
-          echo "$SFDX_AUTH_URL" > auth.txt
-          sf org login sfdx-url -f auth.txt -a devhub -d
+          # Limpiar la URL (eliminar saltos de línea y espacios)
+          echo "$SFDX_AUTH_URL" | tr -d '\n\r ' > auth.txt
+          # Mostrar los primeros 20 caracteres para depuración (sin exponer el secreto completo)
+          echo "URL (primeros 20 chars): $(head -c 20 auth.txt)..."
+          # Intentar autenticar con --json para obtener detalles del error
+          sf org login sfdx-url -f auth.txt -a devhub -d --json
 
-      # --- PRUEBAS APEX ---
       - name: Ejecutar pruebas Apex
         run: sf apex run test --target-org devhub --synchronous --wait 10 --result-format human
 
-      # --- DESPLIEGUE ---
       - name: Desplegar a la org
         run: sf project deploy start --source-dir force-app --target-org devhub --wait 10
