@@ -29,30 +29,27 @@ jobs:
       - name: Ejecutar pruebas LWC
         run: npm run test:unit
 
+      # --- INSTALAR SALESFORCE CLI CON LA ACCIÓN OFICIAL ---
       - name: Instalar Salesforce CLI
-        run: |
-          npm install @salesforce/cli@2.139.6 --location=global
-          echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
+        uses: salesforce/cli@v3
+        with:
+          version: "latest"
 
       - name: Verificar instalación
         run: sf --version
 
-      # --- AUTENTICACIÓN USANDO LA URL DIRECTAMENTE ---
+      # --- AUTENTICACIÓN CON ARCHIVO LIMPIO ---
       - name: Autenticarse con Dev Hub
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
-          # Mostrar información de depuración (primeros 20 caracteres y longitud)
-          echo "Longitud de la URL: ${#SFDX_AUTH_URL}"
-          echo "Primeros 20 caracteres: ${SFDX_AUTH_URL:0:20}"
-
-          # Intentar autenticar con sf (nuevo CLI) usando la URL directa
-          if sf org login sfdx-url --sfdx-url "$SFDX_AUTH_URL" -a devhub -d --json; then
-            echo "✅ Autenticación con sf exitosa"
-          else
-            echo "⚠️ Falló autenticación con sf, intentando con sfdx..."
-            sfdx force:auth:sfdxurl:store --sfdxurl "$SFDX_AUTH_URL" -a devhub -d
-          fi
+          # Limpiar la URL: eliminar saltos de línea, retornos de carro y caracteres no imprimibles
+          echo "$SFDX_AUTH_URL" | tr -d '\n\r' | tr -cd '[:print:]' > auth.txt
+          # Mostrar la longitud y primeros caracteres para depuración
+          echo "Longitud del archivo: $(wc -c < auth.txt)"
+          echo "Primeros 20 caracteres: $(head -c 20 auth.txt)"
+          # Autenticar con sf usando el archivo
+          sf org login sfdx-url -f auth.txt -a devhub -d
 
       - name: Ejecutar pruebas Apex
         run: sf apex run test --target-org devhub --synchronous --wait 10 --result-format human
