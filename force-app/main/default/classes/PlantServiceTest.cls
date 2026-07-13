@@ -2,8 +2,8 @@
 private with sharing class PlantServiceTest {
   @TestSetup
   static void createData() {
-    // Obtener valor dinámico del picklist Locationes__c
-    String locationesValue = '';
+    // Obtener valor del picklist o usar null si no hay valores
+    String locationesValue = null;
     Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
     List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
     if (!picklistEntries.isEmpty()) {
