@@ -10,21 +10,17 @@ jobs:
   validate-and-deploy:
     runs-on: ubuntu-latest
 
-    # 🔥 Usamos el contenedor oficial de Salesforce CLI
-    container:
-      image: salesforce/cli:latest
-
     steps:
       - name: Checkout código
         uses: actions/checkout@v5
 
-      # 🟢 Node.js no está preinstalado en el contenedor, lo instalamos manualmente para LWC
-      - name: Instalar Node.js y npm
-        run: |
-          apt-get update
-          apt-get install -y nodejs npm
+      - name: Instalar Node.js (LTS estable)
+        uses: actions/setup-node@v5
+        with:
+          node-version: "18"
+          cache: "npm"
 
-      - name: Instalar dependencias npm (Jest, Prettier)
+      - name: Instalar dependencias npm
         run: npm install
 
       - name: Validar formato con Prettier
@@ -33,15 +29,22 @@ jobs:
       - name: Ejecutar pruebas LWC
         run: npm run test:unit
 
-      - name: Verificar Salesforce CLI
+      - name: Instalar Salesforce CLI (vía npm)
+        run: |
+          npm install @salesforce/cli@2.139.6 --location=global
+          echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
+
+      - name: Verificar instalación
         run: sf --version
 
+      # --- AUTENTICACIÓN CON SFDX (EVITA EL BUG DE REGEX) ---
       - name: Autenticarse con Dev Hub
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
           echo "$SFDX_AUTH_URL" > auth.txt
-          sf org login sfdx-url -f auth.txt -a devhub -d
+          # Usamos el comando antiguo para evitar el bug
+          sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
 
       - name: Ejecutar pruebas Apex
         run: sf apex run test --target-org devhub --synchronous --wait 10 --result-format human
