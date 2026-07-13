@@ -29,7 +29,7 @@ jobs:
       - name: Ejecutar pruebas LWC
         run: npm run test:unit
 
-      - name: Instalar Salesforce CLI (vía npm)
+      - name: Instalar Salesforce CLI
         run: |
           npm install @salesforce/cli@2.139.6 --location=global
           echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
@@ -43,7 +43,7 @@ jobs:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
           echo "$SFDX_AUTH_URL" > auth.txt
-          # Usamos el comando antiguo para evitar el bug
+          # Usar el comando antiguo para evitar el bug de regex
           sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
 
       - name: Ejecutar pruebas Apex
