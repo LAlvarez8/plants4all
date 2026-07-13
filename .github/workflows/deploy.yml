@@ -31,9 +31,7 @@ jobs:
 
       # --- INSTALAR SALESFORCE CLI CON ACCIÓN OFICIAL ---
       - name: Instalar Salesforce CLI
-        uses: sfdx-cli/setup-sfdx-cli@v1
-        with:
-          version: "latest"
+        run: npm install -g @Salesforce/cli
 
       - name: Verificar instalación
         run: sf --version
