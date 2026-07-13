@@ -28,10 +28,10 @@ jobs:
       - name: Ejecutar pruebas LWC
         run: npm run test:unit
 
-      - name: Instalar Salesforce CLI
-        run: |
-          npm install @salesforce/cli@2.139.6 --location=global
-          echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
+      - name: Instalar Salesforce CLI (binario oficial)
+        uses: svierk/sfdx-cli-setup@main
+        with:
+          version: "latest"
 
       - name: Verificar instalación
         run: sf --version
@@ -40,12 +40,8 @@ jobs:
         env:
           SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
         run: |
-          # Limpiar la URL (eliminar saltos de línea y espacios)
-          echo "$SFDX_AUTH_URL" | tr -d '\n\r ' > auth.txt
-          # Mostrar los primeros 20 caracteres para depuración (sin exponer el secreto completo)
-          echo "URL (primeros 20 chars): $(head -c 20 auth.txt)..."
-          # Intentar autenticar con --json para obtener detalles del error
-          sf org login sfdx-url -f auth.txt -a devhub -d --json
+          # Usar la URL directamente con --sfdx-url
+          sf org login sfdx-url --sfdx-url "$SFDX_AUTH_URL" -a devhub -d
 
       - name: Ejecutar pruebas Apex
         run: sf apex run test --target-org devhub --synchronous --wait 10 --result-format human
