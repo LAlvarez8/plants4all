@@ -4,7 +4,9 @@ private class PlantsDashboardControllerTestFix {
     static void createData() {
         // Obtener valor del picklist (sin el doble getDescribe)
         String locationesValue = null;
-        Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
+        Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields
+            .Locationes__c
+            .getDescribe();
         List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
         if (!picklistEntries.isEmpty()) {
             locationesValue = picklistEntries[0].getValue();
