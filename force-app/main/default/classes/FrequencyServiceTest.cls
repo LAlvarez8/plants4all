@@ -2,12 +2,8 @@
 private with sharing class FrequencyServiceTest {
   @TestSetup
   static void createData() {
-    String locationesValue = null;
-    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
-    List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
-    if (!picklistEntries.isEmpty()) {
-      locationesValue = picklistEntries[0].getValue();
-    }
+    // Valor fijo de la multiselección (usa un valor válido real)
+    String locationesValue = 'Tropical (Amazonas, sureste asiático)';
 
     Species__c aloeVera = new Species__c(
       Name = 'Aloe Vera',
