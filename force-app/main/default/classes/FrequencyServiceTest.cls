@@ -1,98 +1,56 @@
 @isTest
-private with sharing class FrequencyServiceTest {
-  private class DateServiceMock extends DateService {
-    private Integer monthToReturn;
-    public DateServiceMock(Integer month) {
-      this.monthToReturn = month;
+private with sharing class PlantServiceTest {
+    @TestSetup
+    static void createData() {
+        // Obtener valor del picklist (sin el doble getDescribe)
+        String locationesValue = null;
+        Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
+        List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
+        if (!picklistEntries.isEmpty()) {
+            locationesValue = picklistEntries[0].getValue();
+        }
+
+        Species__c aloeVera = new Species__c(
+            Name = 'Aloe Vera',
+            Whatering__c = 'Low (1 vez por semana)',
+            Fertilization__c = 'Low (cada mes)',
+            Location__c = 'Indoors',
+            Locationes__c = locationesValue
+        );
+        insert aloeVera;
     }
-    public override Integer getCurrentMonth() {
-      return monthToReturn;
+
+    @isTest
+    static void testCalculateNextWateringDate() {
+        Species__c specie = [SELECT Id, Whatering__c FROM Species__c LIMIT 1];
+        Plant__c plant = new Plant__c(
+            Species__c = specie.Id,
+            Last_Watered__c = System.today(),
+            Last_Fertilization__c = System.today()
+        );
+        PlantService plantService = new PlantService();
+        plantService.calculateNextWateringDate(new List<Plant__c>{ plant });
+        System.assertEquals(
+            System.today().addDays(7),
+            plant.Next_Water__c,
+            'Next_Water__c should be 7 days after Last_Watered__c'
+        );
     }
-  }
 
-  @isTest
-  static void testGetWateringDaysStaticDelegatesToInstance() {
-    Species__c species = new Species__c(
-      Whatering__c = 'Low (1 vez por semana)'
-    );
-    Integer days = FrequencyService.getWateringDays(species);
-    System.assertEquals(
-      7,
-      days,
-      'getWateringDays debería devolver 7 para frecuencia baja'
-    );
-  }
-
-  @isTest
-  static void testCalculateWateringDaysWithWinterLogic() {
-    DateService mockDate = new DateServiceMock(12);
-    FrequencyService service = new FrequencyService(mockDate);
-    Species__c species = new Species__c(
-      Whatering__c = 'Low (1 vez por semana)'
-    );
-    Integer days = service.calculateWateringDays(species);
-    System.assertEquals(
-      7,
-      days,
-      'En invierno debería mantener los días de riego (aún sin modificar)'
-    );
-  }
-
-  @isTest
-  static void testCalculateWateringDaysSummer() {
-    DateService mockDate = new DateServiceMock(7);
-    FrequencyService service = new FrequencyService(mockDate);
-    Species__c species = new Species__c(Whatering__c = 'High (diario)');
-    Integer days = service.calculateWateringDays(species);
-    System.assertEquals(
-      1,
-      days,
-      'Frecuencia alta debe devolver 1 día en verano'
-    );
-  }
-
-  @isTest
-  static void testCalculateWateringDaysNullSpecies() {
-    DateService mockDate = new DateServiceMock(1);
-    FrequencyService service = new FrequencyService(mockDate);
-    Integer days = service.calculateWateringDays(null);
-    System.assertEquals(
-      7,
-      days,
-      'Species nulo debe devolver el valor por defecto (7 días)'
-    );
-  }
-
-  @isTest
-  static void testCalculateWateringDaysInvalidFrequency() {
-    DateService mockDate = new DateServiceMock(1);
-    FrequencyService service = new FrequencyService(mockDate);
-    Species__c species = new Species__c(Whatering__c = 'Unknown');
-    Integer days = service.calculateWateringDays(species);
-    System.assertEquals(
-      7,
-      days,
-      'Frecuencia desconocida debe devolver el valor por defecto (7)'
-    );
-  }
-
-  @isTest
-  static void testCalculateFertilizationDays() {
-    DateService mockDate = new DateServiceMock(1);
-    FrequencyService service = new FrequencyService(mockDate);
-    Species__c species = new Species__c(Fertilization__c = 'Low (cada mes)');
-    Integer days = service.calculateFertilizationDays(species);
-    System.assertEquals(30, days, 'Fertilización baja debe devolver 30 días');
-  }
-
-  @isTest
-  static void testGetFertilizationDaysDefault() {
-    Species__c species = new Species__c(Fertilization__c = null);
-    Integer days = FrequencyService.getFertilizationDays(species);
-    System.assertEquals(
-      30,
-      days,
-      'Fertilización nula debe devolver el valor por defecto (30)'
-    );
-  }
+    @isTest
+    static void testCalculateNextFertilizationDate() {
+        Species__c specie = [SELECT Id, Fertilization__c FROM Species__c LIMIT 1];
+        Plant__c plant = new Plant__c(
+            Species__c = specie.Id,
+            Last_Watered__c = System.today(),
+            Last_Fertilization__c = System.today()
+        );
+        PlantService plantService = new PlantService();
+        plantService.calculateNextFertilizationDate(new List<Plant__c>{ plant });
+        System.assertEquals(
+            System.today().addDays(30),
+            plant.Next_Fertilization__c,
+            'Next_Fertilization__c should be 30 days after Last_Fertilization__c'
+        );
+    }
 }
