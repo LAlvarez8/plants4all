@@ -2,7 +2,7 @@
 private with sharing class FrequencyServiceTest {
   @TestSetup
   static void createData() {
-    // Valor fijo de la multiselección (usa un valor válido real)
+    // Valor fijo requerido por el campo multiselect
     String locationesValue = 'Tropical (Amazonas, sureste asiático)';
 
     Species__c aloeVera = new Species__c(
@@ -27,7 +27,9 @@ private with sharing class FrequencyServiceTest {
   static void testGetWateringDaysMediumFrequency() {
     FrequencyService service = new FrequencyService();
     Species__c species = new Species__c(
-      Whatering__c = 'Medium (2-3 veces por semana)'
+      Whatering__c = 'Medium (2-3 veces por semana)',
+      Location__c = 'Indoors',
+      Locationes__c = 'Tropical (Amazonas, sureste asiático)'
     );
     insert species;
     Integer days = service.calculateWateringDays(species);
@@ -37,7 +39,11 @@ private with sharing class FrequencyServiceTest {
   @isTest
   static void testGetWateringDaysHighFrequency() {
     FrequencyService service = new FrequencyService();
-    Species__c species = new Species__c(Whatering__c = 'High (diario)');
+    Species__c species = new Species__c(
+      Whatering__c = 'High (diario)',
+      Location__c = 'Indoors',
+      Locationes__c = 'Tropical (Amazonas, sureste asiático)'
+    );
     insert species;
     Integer days = service.calculateWateringDays(species);
     System.assertEquals(1, days, 'High frequency should return 1 day');
@@ -46,7 +52,11 @@ private with sharing class FrequencyServiceTest {
   @isTest
   static void testGetWateringDaysNullFrequency() {
     FrequencyService service = new FrequencyService();
-    Species__c species = new Species__c(Whatering__c = null);
+    Species__c species = new Species__c(
+      Whatering__c = null,
+      Location__c = 'Indoors',
+      Locationes__c = 'Tropical (Amazonas, sureste asiático)'
+    );
     insert species;
     Integer days = service.calculateWateringDays(species);
     System.assertEquals(7, days, 'Null frequency should return default 7 days');
@@ -55,7 +65,11 @@ private with sharing class FrequencyServiceTest {
   @isTest
   static void testGetWateringDaysInvalidFrequency() {
     FrequencyService service = new FrequencyService();
-    Species__c species = new Species__c(Whatering__c = 'Invalid');
+    Species__c species = new Species__c(
+      Whatering__c = 'Invalid',
+      Location__c = 'Indoors',
+      Locationes__c = 'Tropical (Amazonas, sureste asiático)'
+    );
     insert species;
     Integer days = service.calculateWateringDays(species);
     System.assertEquals(
