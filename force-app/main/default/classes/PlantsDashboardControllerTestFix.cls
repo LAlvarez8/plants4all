@@ -1,12 +1,9 @@
-@IsTest
+@isTest
 private class PlantsDashboardControllerTestFix {
   @TestSetup
   static void createData() {
-    // Obtener valor del picklist (sin el doble getDescribe)
     String locationesValue = null;
-    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields
-      .Locationes__c
-      .getDescribe();
+    Schema.DescribeFieldResult fieldDescribe = Schema.SObjectType.Species__c.fields.Locationes__c.getDescribe();
     List<Schema.PicklistEntry> picklistEntries = fieldDescribe.getPicklistValues();
     if (!picklistEntries.isEmpty()) {
       locationesValue = picklistEntries[0].getValue();
@@ -46,7 +43,7 @@ private class PlantsDashboardControllerTestFix {
     };
   }
 
-  @IsTest
+  @isTest
   static void getDashboardDataReturnsChartRows() {
     Test.startTest();
     PlantsDashboardController.DashboardData data = PlantsDashboardController.getDashboardData();
@@ -79,7 +76,7 @@ private class PlantsDashboardControllerTestFix {
     );
   }
 
-  @IsTest
+  @isTest
   static void getDashboardDataWhenNoPlants() {
     delete [SELECT Id FROM Plant__c];
 
