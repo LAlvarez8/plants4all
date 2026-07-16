@@ -2,7 +2,6 @@
 private with sharing class WeatherAlertServiceTest {
   @TestSetup
   static void setupData() {
-    // Valor fijo válido (evita el getDescribe problemático)
     String locationesValue = 'Tropical (Amazonas, sureste asiático)';
 
     Species__c species = new Species__c(
@@ -17,9 +16,10 @@ private with sharing class WeatherAlertServiceTest {
     insert species;
 
     Plant__c plant = new Plant__c(
-      // Name no se asigna manualmente (es solo lectura)
       Species__c = species.Id,
-      OwnerId = UserInfo.getUserId()
+      OwnerId = UserInfo.getUserId(),
+      Last_Watered__c = Date.today(),
+      Last_Fertilization__c = Date.today()
     );
     insert plant;
   }
