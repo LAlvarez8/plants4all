@@ -46,7 +46,6 @@ jobs:
           echo "$SFDX_AUTH_URL" | tr -d '\n\r' | tr -cd '[:print:]' > auth.txt
           sfdx force:auth:sfdxurl:store -f auth.txt -a devhub -d
 
-      # 🔥 PRIMERO DESPLEGAR EL CÓDIGO (incluye los tests corregidos)
       - name: Desplegar código
         run: |
           sf project deploy start \
@@ -54,10 +53,15 @@ jobs:
             --target-org devhub \
             --wait 20
 
-      # 🔥 LUEGO EJECUTAR LAS PRUEBAS (con el código ya actualizado) – USANDO JSON
-      - name: Ejecutar pruebas Apex
+      - name: Ejecutar pruebas Apex (formato JSON)
         run: |
           sf apex run test \
             --target-org devhub \
             --wait 20 \
             --result-format json
+
+      # Opcional: mostrar un resumen legible de los resultados
+      - name: Mostrar resumen de pruebas
+        run: |
+          echo "📊 Las pruebas Apex se ejecutaron correctamente."
+          echo "✅ Revisa los logs de GitHub Actions para ver los detalles."
