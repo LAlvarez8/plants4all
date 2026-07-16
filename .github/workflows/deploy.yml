@@ -54,10 +54,10 @@ jobs:
             --target-org devhub \
             --wait 20
 
-      # 🔥 LUEGO EJECUTAR LAS PRUEBAS (con el código ya actualizado)
+      # 🔥 LUEGO EJECUTAR LAS PRUEBAS (con el código ya actualizado) – USANDO JSON
       - name: Ejecutar pruebas Apex
         run: |
           sf apex run test \
             --target-org devhub \
             --wait 20 \
-            --result-format human
+            --result-format json
