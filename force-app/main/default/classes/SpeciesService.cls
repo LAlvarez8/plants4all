@@ -46,7 +46,7 @@ public with sharing class SpeciesService {
         // NOPMD: La subconsulta está protegida por las validaciones CRUD/FLS anteriores
         return [
             SELECT Id, Name,
-                (SELECT Id, Name FROM Plants__r ORDER BY Name)
+                (SELECT Id, Name FROM Plants__r ORDER BY Name) // NOPMD
             FROM Species__c
             ORDER BY Name
         ];
