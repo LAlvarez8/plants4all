@@ -1,7 +1,6 @@
 public with sharing class SpeciesService {
     @AuraEnabled(cacheable=true)
     public static List<Species__c> getFilteredSpecies(String searchText) {
-        // Validate CRUD permissions before querying
         if (!Schema.sObjectType.Species__c.isAccessible()) {
             throw new AuraHandledException(
                 'No tienes permisos para leer registros de Species__c'
@@ -26,23 +25,34 @@ public with sharing class SpeciesService {
 
     @AuraEnabled(cacheable=true)
     public static List<Species__c> getSpeciesWithPlants() {
-        // Validar permisos CRUD
+        // Validar permisos CRUD para Species__c
         if (!Schema.sObjectType.Species__c.isAccessible()) {
             throw new AuraHandledException('No tienes permisos para leer especies');
         }
 
-        // Validar FLS de campos necesarios
+        // Validar FLS de campos de Species__c
         if (!Species__c.Id.getDescribe().isAccessible() ||
             !Species__c.Name.getDescribe().isAccessible()) {
             throw new AuraHandledException('No tienes permisos para leer campos de Species');
         }
 
-        // Consulta con subconsulta para traer plantas hijas
-        // NOTA: WITH SECURITY_ENFORCED no es compatible con subconsultas en esta versión de API,
-        // por lo que confiamos en las validaciones manuales anteriores.
+        // ✅ Validar permisos CRUD para Plant__c (objeto relacionado en la subconsulta)
+        if (!Schema.sObjectType.Plant__c.isAccessible()) {
+            throw new AuraHandledException('No tienes permisos para leer plantas');
+        }
+
+        // ✅ Validar FLS de campos de Plant__c (Id y Name)
+        if (!Plant__c.Id.getDescribe().isAccessible() ||
+            !Plant__c.Name.getDescribe().isAccessible()) {
+            throw new AuraHandledException('No tienes permisos para leer campos de Plant');
+        }
+
+        // Consulta con subconsulta (WITH SECURITY_ENFORCED no es compatible con subconsultas)
+        // La seguridad ya está validada con los métodos isAccessible() anteriores.
+        // NOPMD: La subconsulta está protegida por las validaciones CRUD/FLS anteriores.
         return [
             SELECT Id, Name,
-                (SELECT Id, Name FROM Plants__r ORDER BY Name)
+                (SELECT Id, Name FROM Plants__r ORDER BY Name) // NOPMD
             FROM Species__c
             ORDER BY Name
         ];
