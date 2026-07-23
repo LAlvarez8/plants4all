@@ -16,7 +16,7 @@
                     <lightning-input label="Frecuencia de Fertilización" value={species.Fertilization__c} onchange={handleSpeciesChange} data-field="Fertilization__c"></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-1 slds-size_1-of-2-medium">
-                    <lightning-input label="Ubicación (Indoors/Outdoors)" value={species.Location__c} onchange={handleSpeciesChange} data-field="Location__c"></lightning-input>
+                    <lightning-input label="Ubicación" value={species.Location__c} onchange={handleSpeciesChange} data-field="Location__c"></lightning-input>
                 </div>
                 <div class="slds-col slds-size_1-of-1">
                     <lightning-input label="Clima Ideal (Locationes)" value={species.Locationes__c} onchange={handleSpeciesChange} data-field="Locationes__c"></lightning-input>
@@ -24,7 +24,6 @@
             </div>
         </div>
 
-        <!-- Separador -->
         <hr class="slds-m-vertical_medium" />
 
         <!-- Sección de la planta -->
@@ -51,9 +50,7 @@
 
         <!-- Mensajes -->
         <template if:true={message}>
-            <div class={messageClass} role="alert">
-                {message}
-            </div>
+            <div class={messageClass} role="alert">{message}</div>
         </template>
     </div>
 </template>

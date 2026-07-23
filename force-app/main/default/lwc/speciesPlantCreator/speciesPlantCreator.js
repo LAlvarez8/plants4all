@@ -28,7 +28,6 @@ export default class SpeciesPlantCreator extends LightningElement {
     }
 
     handleCreate() {
-        // Validar campos obligatorios
         if (!this.species.Name) {
             this.showMessage('El nombre de la especie es obligatorio', 'slds-text-color_error');
             return;

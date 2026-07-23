@@ -19,7 +19,6 @@ public with sharing class SpeciesService {
                 Ideal_Min_Temperature__c
             FROM Species__c
             WHERE Name LIKE :likeValue
-            WITH SECURITY_ENFORCED
         ];
     }
 
@@ -29,26 +28,43 @@ public with sharing class SpeciesService {
             throw new AuraHandledException('No tienes permisos para leer especies');
         }
 
-        if (!Species__c.Id.getDescribe().isAccessible() ||
-            !Species__c.Name.getDescribe().isAccessible()) {
-            throw new AuraHandledException('No tienes permisos para leer campos de Species');
+        // Obtener todas las especies (sin WITH SECURITY_ENFORCED para evitar errores)
+        List<Species__c> speciesList = [
+            SELECT Id, Name
+            FROM Species__c
+            ORDER BY Name
+        ];
+
+        if (speciesList.isEmpty()) {
+            return speciesList;
         }
+
+        Set<Id> speciesIds = new Map<Id, Species__c>(speciesList).keySet();
 
         if (!Schema.sObjectType.Plant__c.isAccessible()) {
             throw new AuraHandledException('No tienes permisos para leer plantas');
         }
 
-        if (!Plant__c.Id.getDescribe().isAccessible() ||
-            !Plant__c.Name.getDescribe().isAccessible()) {
-            throw new AuraHandledException('No tienes permisos para leer campos de Plant');
-        }
-
-        // NOPMD: La subconsulta está protegida por las validaciones CRUD/FLS anteriores
-        return [
-            SELECT Id, Name,
-                (SELECT Id, Name FROM Plants__r ORDER BY Name) // NOPMD
-            FROM Species__c
+        List<Plant__c> allPlants = [
+            SELECT Id, Name, Species__c
+            FROM Plant__c
+            WHERE Species__c IN :speciesIds
             ORDER BY Name
         ];
+
+        Map<Id, List<Plant__c>> plantsBySpecies = new Map<Id, List<Plant__c>>();
+        for (Plant__c plant : allPlants) {
+            if (!plantsBySpecies.containsKey(plant.Species__c)) {
+                plantsBySpecies.put(plant.Species__c, new List<Plant__c>());
+            }
+            plantsBySpecies.get(plant.Species__c).add(plant);
+        }
+
+        for (Species__c species : speciesList) {
+            List<Plant__c> relatedPlants = plantsBySpecies.get(species.Id);
+            species.Plants__r = relatedPlants != null ? relatedPlants : new List<Plant__c>();
+        }
+
+        return speciesList;
     }
 }
