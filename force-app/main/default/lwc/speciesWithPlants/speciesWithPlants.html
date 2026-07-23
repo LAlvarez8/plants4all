@@ -2,20 +2,17 @@
     <div class="slds-box slds-theme_default">
         <h1 class="slds-text-heading_medium slds-m-bottom_medium">🌿 Especies y sus plantas</h1>
 
-        <!-- Estado de carga -->
         <template if:true={loading}>
             <lightning-spinner alternative-text="Cargando..." size="medium"></lightning-spinner>
         </template>
 
-        <!-- Error -->
         <template if:true={error}>
             <div class="slds-text-color_error">Error al cargar los datos: {error.message}</div>
         </template>
 
-        <!-- Accordion con especies y plantas -->
-        <template if:true={speciesWithPlants.data}>
+        <template if:true={speciesList}>
             <lightning-accordion>
-                <template for:each={speciesWithPlants.data} for:item="species">
+                <template for:each={speciesList} for:item="species">
                     <lightning-accordion-section
                         key={species.Id}
                         name={species.Id}
@@ -29,7 +26,7 @@
                             </ul>
                         </template>
                         <template if:false={species.Plants__r}>
-                            <p class="slds-text-color_weak slds-m-left_medium">🌱 Esta especie no tiene plantas registradas</p>
+                            <p class="slds-text-color_weak slds-m-left_medium">🌱 Esta especie no tiene plantas</p>
                         </template>
                     </lightning-accordion-section>
                 </template>

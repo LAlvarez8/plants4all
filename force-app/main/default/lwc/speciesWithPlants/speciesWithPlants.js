@@ -11,4 +11,16 @@ export default class SpeciesWithPlants extends LightningElement {
     get error() {
         return this.speciesWithPlants?.error;
     }
+
+    get speciesList() {
+        if (this.speciesWithPlants?.data) {
+            return this.speciesWithPlants.data.map(item => {
+                return {
+                    ...item.species,
+                    Plants__r: item.plants
+                };
+            });
+        }
+        return [];
+    }
 }

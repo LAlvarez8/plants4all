@@ -1,4 +1,12 @@
 public with sharing class SpeciesService {
+    // Clase wrapper para devolver especie con sus plantas
+    public class SpeciesWithPlantsWrapper {
+        @AuraEnabled
+        public Species__c species { get; set; }
+        @AuraEnabled
+        public List<Plant__c> plants { get; set; }
+    }
+
     @AuraEnabled(cacheable=true)
     public static List<Species__c> getFilteredSpecies(String searchText) {
         if (!Schema.sObjectType.Species__c.isAccessible()) {
@@ -23,12 +31,12 @@ public with sharing class SpeciesService {
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<Species__c> getSpeciesWithPlants() {
+    public static List<SpeciesWithPlantsWrapper> getSpeciesWithPlants() {
         if (!Schema.sObjectType.Species__c.isAccessible()) {
             throw new AuraHandledException('No tienes permisos para leer especies');
         }
 
-        // Obtener todas las especies (sin WITH SECURITY_ENFORCED para evitar errores)
+        // Obtener todas las especies
         List<Species__c> speciesList = [
             SELECT Id, Name
             FROM Species__c
@@ -36,7 +44,7 @@ public with sharing class SpeciesService {
         ];
 
         if (speciesList.isEmpty()) {
-            return speciesList;
+            return new List<SpeciesWithPlantsWrapper>();
         }
 
         Set<Id> speciesIds = new Map<Id, Species__c>(speciesList).keySet();
@@ -45,6 +53,7 @@ public with sharing class SpeciesService {
             throw new AuraHandledException('No tienes permisos para leer plantas');
         }
 
+        // Obtener todas las plantas relacionadas
         List<Plant__c> allPlants = [
             SELECT Id, Name, Species__c
             FROM Plant__c
@@ -52,6 +61,7 @@ public with sharing class SpeciesService {
             ORDER BY Name
         ];
 
+        // Crear mapa de especies → lista de plantas
         Map<Id, List<Plant__c>> plantsBySpecies = new Map<Id, List<Plant__c>>();
         for (Plant__c plant : allPlants) {
             if (!plantsBySpecies.containsKey(plant.Species__c)) {
@@ -60,11 +70,17 @@ public with sharing class SpeciesService {
             plantsBySpecies.get(plant.Species__c).add(plant);
         }
 
+        // Construir la lista de wrappers
+        List<SpeciesWithPlantsWrapper> result = new List<SpeciesWithPlantsWrapper>();
         for (Species__c species : speciesList) {
-            List<Plant__c> relatedPlants = plantsBySpecies.get(species.Id);
-            species.Plants__r = relatedPlants != null ? relatedPlants : new List<Plant__c>();
+            SpeciesWithPlantsWrapper wrapper = new SpeciesWithPlantsWrapper();
+            wrapper.species = species;
+            wrapper.plants = plantsBySpecies.get(species.Id) != null 
+                ? plantsBySpecies.get(species.Id) 
+                : new List<Plant__c>();
+            result.add(wrapper);
         }
 
-        return speciesList;
+        return result;
     }
 }
