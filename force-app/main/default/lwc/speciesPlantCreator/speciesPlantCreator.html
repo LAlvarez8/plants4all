@@ -1,56 +1,43 @@
 <template>
-    <div class="slds-box slds-theme_default">
-        <h1 class="slds-text-heading_medium slds-m-bottom_medium">🌿 Crear Especie y Planta</h1>
+    <lightning-card title="🌿 Nueva Especie y Planta">
+        <div class="slds-p-around_medium">
+            <!-- Formulario para la especie -->
+            <lightning-record-form
+                object-api-name="Species__c"
+                layout-type="Full"
+                fields={speciesFields}
+                onsuccess={handleSpeciesSuccess}
+                onerror={handleError}
+            >
+            </lightning-record-form>
 
-        <!-- Sección de la especie -->
-        <div class="slds-section">
-            <h2 class="slds-text-heading_small slds-m-bottom_small">📍 Especie</h2>
-            <div class="slds-grid slds-wrap slds-gutters">
-                <div class="slds-col slds-size_1-of-1 slds-size_1-of-2-medium">
-                    <lightning-input label="Nombre" value={species.Name} onchange={handleSpeciesChange} data-field="Name" required></lightning-input>
-                </div>
-                <div class="slds-col slds-size_1-of-1 slds-size_1-of-2-medium">
-                    <lightning-input label="Frecuencia de Riego" value={species.Whatering__c} onchange={handleSpeciesChange} data-field="Whatering__c"></lightning-input>
-                </div>
-                <div class="slds-col slds-size_1-of-1 slds-size_1-of-2-medium">
-                    <lightning-input label="Frecuencia de Fertilización" value={species.Fertilization__c} onchange={handleSpeciesChange} data-field="Fertilization__c"></lightning-input>
-                </div>
-                <div class="slds-col slds-size_1-of-1 slds-size_1-of-2-medium">
-                    <lightning-input label="Ubicación" value={species.Location__c} onchange={handleSpeciesChange} data-field="Location__c"></lightning-input>
-                </div>
-                <div class="slds-col slds-size_1-of-1">
-                    <lightning-input label="Clima Ideal (Locationes)" value={species.Locationes__c} onchange={handleSpeciesChange} data-field="Locationes__c"></lightning-input>
-                </div>
+            <!-- Formulario para la planta (se habilita después de crear la especie) -->
+            <template if:true={speciesId}>
+                <lightning-record-form
+                    object-api-name="Plant__c"
+                    layout-type="Full"
+                    fields={plantFields}
+                    onsuccess={handlePlantSuccess}
+                    onerror={handleError}
+                >
+                </lightning-record-form>
+            </template>
+
+            <!-- Botones -->
+            <div class="slds-m-top_medium">
+                <template if:false={speciesId}>
+                    <lightning-button label="Crear Especie" variant="brand" onclick={createSpecies}></lightning-button>
+                </template>
+                <template if:true={speciesId}>
+                    <lightning-button label="Crear Planta" variant="brand" onclick={createPlant}></lightning-button>
+                </template>
+                <lightning-button label="Cancelar" variant="neutral" onclick={handleCancel}></lightning-button>
             </div>
-        </div>
 
-        <hr class="slds-m-vertical_medium" />
-
-        <!-- Sección de la planta -->
-        <div class="slds-section">
-            <h2 class="slds-text-heading_small slds-m-bottom_small">🌱 Planta</h2>
-            <div class="slds-grid slds-wrap slds-gutters">
-                <div class="slds-col slds-size_1-of-1 slds-size_1-of-2-medium">
-                    <lightning-input label="Último Riego" type="date" value={plant.Last_Watered__c} onchange={handlePlantChange} data-field="Last_Watered__c"></lightning-input>
-                </div>
-                <div class="slds-col slds-size_1-of-1 slds-size_1-of-2-medium">
-                    <lightning-input label="Última Fertilización" type="date" value={plant.Last_Fertilization__c} onchange={handlePlantChange} data-field="Last_Fertilization__c"></lightning-input>
-                </div>
-            </div>
-        </div>
-
-        <!-- Botones -->
-        <div class="slds-m-top_medium">
-            <lightning-button label="Crear Todo" variant="brand" onclick={handleCreate} disabled={loading}></lightning-button>
-            <lightning-button label="Limpiar" variant="neutral" onclick={handleClear} disabled={loading}></lightning-button>
-            <template if:true={loading}>
-                <lightning-spinner alternative-text="Creando..." size="medium"></lightning-spinner>
+            <!-- Mensajes -->
+            <template if:true={message}>
+                <div class={messageClass} role="alert">{message}</div>
             </template>
         </div>
-
-        <!-- Mensajes -->
-        <template if:true={message}>
-            <div class={messageClass} role="alert">{message}</div>
-        </template>
-    </div>
+    </lightning-card>
 </template>
