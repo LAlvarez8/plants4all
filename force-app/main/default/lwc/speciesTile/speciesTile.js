@@ -1,5 +1,6 @@
 import { LightningElement, api } from "lwc";
 import { NavigationMixin } from "lightning/navigation";
+import speciesImages from "@salesforce/resourceUrl/speciesImages";
 
 export default class SpeciesTile extends NavigationMixin(LightningElement) {
   @api species;
@@ -13,6 +14,13 @@ export default class SpeciesTile extends NavigationMixin(LightningElement) {
         actionName: "view"
       }
     });
+  }
+
+  get imageFromStatic() {
+    if (!this.species || !this.species.Image_Name__c) {
+      return "";
+    }
+    return `${speciesImages}/speciesImages/${encodeURIComponent(this.species.Image_Name__c)}`;
   }
 
   get location() {

@@ -22,5 +22,6 @@
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
     "**/node_modules/**": true
-  }
+  },
+  "salesforcedx-vscode-core.show-cli-success-msg": false
 }

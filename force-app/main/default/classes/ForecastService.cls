@@ -35,13 +35,11 @@ public with sharing class ForecastService {
       );
     }
 
-    // Validar que la respuesta tenga contenido
     String body = res.getBody();
     if (String.isBlank(body)) {
       throw new ForecastException('OpenMeteo response body is empty');
     }
 
-    // Deserializar y validar estructura
     ForecastResponse forecast = (ForecastResponse) JSON.deserialize(
       body,
       ForecastResponse.class

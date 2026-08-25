@@ -1,14 +1,11 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Apex Replay Debugger",
+      "name": "Launch Apex Replay Debugger (manual)",
       "type": "apex-replay",
       "request": "launch",
-      "logFile": "${command:AskForLogFileName}",
+      "logFile": "C:\\Users\\Leo_a\\plants4all\\.sfdx\\tools\\debug\\logs\\07Lg500000CcjI9EAJ.log",
       "stopOnEntry": true,
       "trace": true
     }

@@ -1,0 +1,14 @@
+{
+  "models": [
+    {
+      "title": "LM Studio Qwen Coder",
+      "provider": "lmstudio",
+      "model": "qwen2.5-coder-1.5b-inst"
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "LM Studio Autocomplete",
+    "provider": "lmstudio",
+    "model": "qwen2.5-coder-1.5b-inst"
+  }
+}

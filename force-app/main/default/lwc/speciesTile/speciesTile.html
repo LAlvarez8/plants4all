@@ -25,8 +25,8 @@
 
       <!-- IMAGEN -->
       <div class="image-container">
-        <template if:true={species.Image_URL__c}>
-          <img class="image" src={species.Image_URL__c} alt={species.Name} />
+        <template if:true={imageFromStatic}>
+          <img class="image" src={imageFromStatic} alt={species.Name} />
         </template>
       </div>
 

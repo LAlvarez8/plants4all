@@ -1,43 +1,48 @@
 <template>
-    <lightning-card title="🌿 Nueva Especie y Planta">
-        <div class="slds-p-around_medium">
-            <!-- Formulario para la especie -->
-            <lightning-record-form
-                object-api-name="Species__c"
-                layout-type="Full"
-                fields={speciesFields}
-                onsuccess={handleSpeciesSuccess}
-                onerror={handleError}
-            >
-            </lightning-record-form>
+  <lightning-quick-action-panel
+    header="🌿 Nueva Especie y Planta"
+    onclose={handleCancel}
+  >
+    <!-- CONTENIDO DEL FORMULARIO -->
+    <div class="slds-p-around_medium">
+      <lightning-input
+        label="Nombre de la especie"
+        value={speciesName}
+        onchange={handleSpeciesChange}
+        required
+      ></lightning-input>
 
-            <!-- Formulario para la planta (se habilita después de crear la especie) -->
-            <template if:true={speciesId}>
-                <lightning-record-form
-                    object-api-name="Plant__c"
-                    layout-type="Full"
-                    fields={plantFields}
-                    onsuccess={handlePlantSuccess}
-                    onerror={handleError}
-                >
-                </lightning-record-form>
-            </template>
+      <lightning-input
+        label="Nombre de la planta"
+        value={plantName}
+        onchange={handlePlantNameChange}
+      ></lightning-input>
 
-            <!-- Botones -->
-            <div class="slds-m-top_medium">
-                <template if:false={speciesId}>
-                    <lightning-button label="Crear Especie" variant="brand" onclick={createSpecies}></lightning-button>
-                </template>
-                <template if:true={speciesId}>
-                    <lightning-button label="Crear Planta" variant="brand" onclick={createPlant}></lightning-button>
-                </template>
-                <lightning-button label="Cancelar" variant="neutral" onclick={handleCancel}></lightning-button>
-            </div>
+      <lightning-input
+        type="date"
+        label="Fecha de adquisición"
+        value={acquisitionDate}
+        onchange={handleDateChange}
+      ></lightning-input>
 
-            <!-- Mensajes -->
-            <template if:true={message}>
-                <div class={messageClass} role="alert">{message}</div>
-            </template>
-        </div>
-    </lightning-card>
+      <template if:true={message}>
+        <div class={messageClass}>{message}</div>
+      </template>
+    </div>
+
+    <!-- PIE DEL MODAL (BOTONES) -->
+    <div slot="footer" class="slds-grid slds-grid_align-end slds-gap_small">
+      <lightning-button
+        label="Cancelar"
+        variant="neutral"
+        onclick={handleCancel}
+      ></lightning-button>
+      <lightning-button
+        label="Crear"
+        variant="brand"
+        onclick={handleCreate}
+        disabled={loading}
+      ></lightning-button>
+    </div>
+  </lightning-quick-action-panel>
 </template>

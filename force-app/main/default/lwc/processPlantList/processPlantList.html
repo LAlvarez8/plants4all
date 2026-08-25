@@ -1,0 +1,11 @@
+<template>
+  <div style="padding: 1rem">
+    <h2>Plantas seleccionadas</h2>
+    <p>IDs recibidos: {ids.length}</p>
+    <ul>
+      <template for:each={ids} for:item="id">
+        <li key={id}>{id}</li>
+      </template>
+    </ul>
+  </div>
+</template>

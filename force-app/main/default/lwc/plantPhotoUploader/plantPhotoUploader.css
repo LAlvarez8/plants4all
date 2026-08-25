@@ -1,0 +1,12 @@
+.preview-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.preview {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--lwc-borderRadiusMedium, 0.5rem);
+  max-height: 300px;
+  object-fit: contain;
+}

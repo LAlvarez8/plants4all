@@ -1,0 +1,24 @@
+<apex:page
+  standardController="Plant__c"
+  recordSetVar="records"
+  extensions="ProcessPlantListController"
+  showHeader="false"
+  sidebar="false"
+  lightningStylesheets="true"
+>
+  <apex:includeLightning />
+  <div id="lightning" />
+
+  <script>
+    $Lightning.use("c:processPlantListApp", function () {
+      $Lightning.createComponent(
+        "c:processPlantList",
+        { selectedIds: "{!JSENCODE(selectedIds)}" },
+        "lightning",
+        function (component) {
+          console.log("LWC cargado correctamente");
+        }
+      );
+    });
+  </script>
+</apex:page>

@@ -1,31 +1,38 @@
 public with sharing class SpeciesPlantController {
-    @AuraEnabled
-    public static void createSpeciesAndPlant(Species__c species, Plant__c plant) {
-        // Validar permisos CRUD
-        if (!Schema.sObjectType.Species__c.isCreateable()) {
-            throw new AuraHandledException('No tienes permiso para crear especies');
-        }
-        if (!Schema.sObjectType.Plant__c.isCreateable()) {
-            throw new AuraHandledException('No tienes permiso para crear plantas');
-        }
-
-        // Guardar punto de control (Savepoint) para rollback parcial
-        Savepoint sp = Database.setSavepoint();
-
-        try {
-            // Insertar especie
-            insert species;
-
-            // Asignar el ID de la especie a la planta
-            plant.Species__c = species.Id;
-
-            // Insertar planta
-            insert plant;
-
-        } catch (Exception e) {
-            // Si falla la planta, hacer rollback a la especie (la especie se guarda, la planta no)
-            Database.rollback(sp);
-            throw new AuraHandledException('Error al crear la planta, pero la especie se guardó: ' + e.getMessage());
-        }
+  @AuraEnabled
+  public static String createSpeciesAndPlant(
+    String speciesName,
+    String plantName,
+    Date lastWatered,
+    Date lastFertilization
+  ) {
+    if (!Schema.sObjectType.Species__c.isCreateable()) {
+      throw new AuraHandledException('No tienes permiso para crear especies');
     }
+    if (!Schema.sObjectType.Plant__c.isCreateable()) {
+      throw new AuraHandledException('No tienes permiso para crear plantas');
+    }
+
+    Savepoint sp = Database.setSavepoint();
+
+    try {
+      Species__c newSpecies = new Species__c(Name = speciesName);
+      insert newSpecies;
+
+      Plant__c newPlant = new Plant__c(
+        Plant_Name__c = plantName, // ← Campo personalizado en lugar de Name
+        Species__c = newSpecies.Id,
+        Last_Watered__c = lastWatered,
+        Last_Fertilization__c = lastFertilization
+      );
+      insert newPlant;
+
+      return newSpecies.Id;
+    } catch (Exception e) {
+      Database.rollback(sp);
+      throw new AuraHandledException(
+        'Error al crear la planta: ' + e.getMessage()
+      );
+    }
+  }
 }

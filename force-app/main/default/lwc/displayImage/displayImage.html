@@ -1,0 +1,8 @@
+<template>
+  <template if:true={url}>
+    <img src={url} width={width} height={height} alt="Imagen de la especie" />
+  </template>
+  <template if:false={url}>
+    <p>No image available</p>
+  </template>
+</template>

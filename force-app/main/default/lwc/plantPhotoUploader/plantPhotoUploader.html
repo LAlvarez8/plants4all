@@ -1,0 +1,27 @@
+<template>
+  <lightning-card title="Foto de la planta">
+    <div class="slds-p-around_medium">
+      <lightning-input
+        type="file"
+        label="Tomar o subir foto"
+        accept="image/*"
+        onchange={handleFileChange}
+      ></lightning-input>
+
+      <template if:true={previewUrl}>
+        <div class="preview-container">
+          <img src={previewUrl} alt="Vista previa" class="preview" />
+        </div>
+      </template>
+
+      <div class="slds-m-top_small">
+        <lightning-button
+          label="Guardar foto"
+          variant="brand"
+          onclick={handleSave}
+          disabled={isSaving}
+        ></lightning-button>
+      </div>
+    </div>
+  </lightning-card>
+</template>
