@@ -5,7 +5,13 @@ private class SpeciesServiceTest {
     Integer speciesCount = 3;
     List<Species__c> speciesToInsert = new List<Species__c>();
     for (Integer i = 0; i < speciesCount; i++) {
-      speciesToInsert.add(new Species__c(Name = 'Species ' + i));
+      speciesToInsert.add(
+        new Species__c(
+          Name = 'Species ' + i,
+          Location__c = 'Outdoors',
+          Locationes__c = 'Tropical (Amazonas, sureste asiático)'
+        )
+      );
     }
     insert speciesToInsert;
 

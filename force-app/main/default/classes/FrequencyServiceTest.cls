@@ -27,6 +27,7 @@ private with sharing class FrequencyServiceTest {
   static void testGetWateringDaysMediumFrequency() {
     FrequencyService service = new FrequencyService();
     Species__c species = new Species__c(
+      Name = 'Aloe Vera',
       Whatering__c = 'Medium (2-3 veces por semana)',
       Location__c = 'Indoors',
       Locationes__c = 'Tropical (Amazonas, sureste asiático)'
@@ -40,6 +41,7 @@ private with sharing class FrequencyServiceTest {
   static void testGetWateringDaysHighFrequency() {
     FrequencyService service = new FrequencyService();
     Species__c species = new Species__c(
+      Name = 'Aloe Vera',
       Whatering__c = 'High (diario)',
       Location__c = 'Indoors',
       Locationes__c = 'Tropical (Amazonas, sureste asiático)'
@@ -53,6 +55,7 @@ private with sharing class FrequencyServiceTest {
   static void testGetWateringDaysNullFrequency() {
     FrequencyService service = new FrequencyService();
     Species__c species = new Species__c(
+      Name = 'Aloe Vera',
       Whatering__c = null,
       Location__c = 'Indoors',
       Locationes__c = 'Tropical (Amazonas, sureste asiático)'
@@ -66,6 +69,7 @@ private with sharing class FrequencyServiceTest {
   static void testGetWateringDaysInvalidFrequency() {
     FrequencyService service = new FrequencyService();
     Species__c species = new Species__c(
+      Name = 'Aloe Vera',
       Whatering__c = 'Invalid',
       Location__c = 'Indoors',
       Locationes__c = 'Tropical (Amazonas, sureste asiático)'
