@@ -1,0 +1,4 @@
+.error-text {
+  color: var(--lwc-colorTextError, #ba0517);
+  margin-top: 0.5rem;
+}

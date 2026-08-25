@@ -1,0 +1,23 @@
+<template>
+  <lightning-card title="Ubicación de la planta">
+    <div class="slds-p-around_medium">
+      <lightning-button
+        label="Obtener mi ubicación"
+        variant="brand"
+        onclick={handleGetLocation}
+        disabled={isLoading}
+      ></lightning-button>
+
+      <template if:true={errorMessage}>
+        <p class="error-text">{errorMessage}</p>
+      </template>
+
+      <template if:true={latitude}>
+        <div class="slds-m-top_small">
+          <p><strong>Latitud:</strong> {latitude}</p>
+          <p><strong>Longitud:</strong> {longitude}</p>
+        </div>
+      </template>
+    </div>
+  </lightning-card>
+</template>

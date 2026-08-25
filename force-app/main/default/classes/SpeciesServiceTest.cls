@@ -1,7 +1,7 @@
 @isTest
 private class SpeciesServiceTest {
   @isTest
-  static void getFilteredSpecies_emptySearchText_returnsAllSpecies() {
+  static void getFilteredSpeciesEmptySearchTextReturnsAllSpecies() {
     Integer speciesCount = 3;
     List<Species__c> speciesToInsert = new List<Species__c>();
     for (Integer i = 0; i < speciesCount; i++) {
